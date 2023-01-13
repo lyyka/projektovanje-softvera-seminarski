@@ -6,6 +6,7 @@ import communication.Request;
 import communication.Response;
 import communication.Sender;
 import domain.Broker;
+import domain.Client;
 import java.net.Socket;
 
 public class Communication {
@@ -37,6 +38,17 @@ public class Communication {
         if(response.getException()==null){
             return (Broker) response.getResult();
         }else{
+            throw response.getException();
+        }
+    }
+    
+    public void addClient(Client client) throws Exception
+    {
+        Request request = new Request(Operation.SAVE_CLIENT, client);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        
+        if(response.getException()!=null){
             throw response.getException();
         }
     }
