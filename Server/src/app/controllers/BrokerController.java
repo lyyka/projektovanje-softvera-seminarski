@@ -13,7 +13,7 @@ public class BrokerController {
     
     public void save(Broker broker) throws Exception {
         try {
-            this.repo.save(broker);
+            this.repo.add(broker);
             this.repo.commit();
         } catch (Exception e) {
             this.repo.rollback();

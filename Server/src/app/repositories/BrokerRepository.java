@@ -6,13 +6,14 @@ import java.util.List;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class BrokerRepository extends Repository {
+public class BrokerRepository implements DbRepository<Broker> {
+    @Override
     public List<Broker> getAll()
     {
         try {
             String sql = "select * from brokers";
             List<Broker> brokers = new ArrayList<>();
-            Connection connection = DatabaseBroker.getConnection();
+            Connection connection = DatabaseBroker.getInstance().getConnection();
 
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
@@ -35,11 +36,16 @@ public class BrokerRepository extends Repository {
             return null;
         }
     }
-    
-    public void save(Broker broker) throws Exception
-    {
+
+    @Override
+    public List getAll(Broker broker) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void add(Broker broker) throws Exception {
         try {
-            Connection connection = DatabaseBroker.getConnection();
+            Connection connection = DatabaseBroker.getInstance().getConnection();
             boolean isNew = broker.getId() == null;
             String sql;
             PreparedStatement statement;
@@ -80,13 +86,18 @@ public class BrokerRepository extends Repository {
             throw new Exception("Broker can not be saved!");
         }
     }
-    
-    public void delete(Broker broker) throws Exception
-    {
+
+    @Override
+    public void edit(Broker param) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void delete(Broker broker) throws Exception {
         try {
             String sql = "delete from brokers id=" + broker.getId();
             System.out.println(sql);
-            Connection connection = DatabaseBroker.getConnection();
+            Connection connection = DatabaseBroker.getInstance().getConnection();
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
             statement.close();

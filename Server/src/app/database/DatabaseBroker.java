@@ -4,18 +4,29 @@ import app.helpers.PropertiesFile;
 import java.sql.*;
 
 public class DatabaseBroker {
-    private static Connection connection;
+    private Connection connection;
+    private static DatabaseBroker instance;
+
+    private DatabaseBroker() {
+    }
+
+    public static DatabaseBroker getInstance() {
+        if (instance == null) {
+            instance = new DatabaseBroker();
+        }
+        return instance;
+    }
     
-    public static Connection getConnection() throws SQLException
+    public Connection getConnection() throws SQLException
     {
-        if(DatabaseBroker.connection == null || DatabaseBroker.connection.isClosed()) {
+        if(this.connection == null || this.connection.isClosed()) {
             String url = PropertiesFile.get("database_url");
             String user = PropertiesFile.get("database_user");
             String password = PropertiesFile.get("database_password");
-            DatabaseBroker.connection = DriverManager.getConnection(url, user, password);
-            DatabaseBroker.connection.setAutoCommit(false);
+            this.connection = DriverManager.getConnection(url, user, password);
+            this.connection.setAutoCommit(false);
         }
         
-        return DatabaseBroker.connection;
+        return this.connection;
     }
 }

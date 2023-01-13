@@ -7,13 +7,33 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductRepository extends Repository {
-    public List<Product> getAll()
-    {
+public class ProductRepository implements DbRepository<Product> {
+    @Override
+    public List<Product> getAll(Product param) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void add(Product param) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void edit(Product param) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void delete(Product param) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<Product> getAll() {
         try {
             String sql = "select * from products";
             List<Product> products = new ArrayList<>();
-            Connection connection = DatabaseBroker.getConnection();
+            Connection connection = DatabaseBroker.getInstance().getConnection();
 
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);

@@ -18,7 +18,7 @@ public class ClientController {
     
     public void save(Client client) throws Exception {
         try {
-            this.repo.save(client);
+            this.repo.add(client);
             this.repo.commit();
         } catch (Exception e) {
             this.repo.rollback();

@@ -6,13 +6,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientRepository extends Repository {
+public class ClientRepository implements DbRepository<Client> {
+    @Override
     public List<Client> getAll()
     {
         try {
             String sql = "select * from clients";
             List<Client> clients = new ArrayList<>();
-            Connection connection = DatabaseBroker.getConnection();
+            Connection connection = DatabaseBroker.getInstance().getConnection();
 
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
@@ -37,11 +38,31 @@ public class ClientRepository extends Repository {
             return null;
         }
     }
-    
-    public Client save(Client client) throws Exception
+   
+    @Override
+    public void delete(Client client) throws Exception
     {
         try {
-            Connection connection = DatabaseBroker.getConnection();
+            String sql = "delete from clients id=" + client.getId();
+            System.out.println(sql);
+            Connection connection = DatabaseBroker.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+            statement.close();
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }
+    }
+
+    @Override
+    public List<Client> getAll(Client param) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void add(Client client) throws Exception {
+        try {
+            Connection connection = DatabaseBroker.getInstance().getConnection();
             boolean isNew = client.getId() == null;
             String sql;
             PreparedStatement statement;
@@ -78,25 +99,14 @@ public class ClientRepository extends Repository {
             }
             
             statement.close();
-        
-            return client;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new Exception("Client can not be saved!");
         }
     }
-    
-    public void delete(Client client) throws Exception
-    {
-        try {
-            String sql = "delete from clients id=" + client.getId();
-            System.out.println(sql);
-            Connection connection = DatabaseBroker.getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(sql);
-            statement.close();
-        } catch (Exception ex) {
-            throw new Exception(ex.getMessage());
-        }
+
+    @Override
+    public void edit(Client param) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
