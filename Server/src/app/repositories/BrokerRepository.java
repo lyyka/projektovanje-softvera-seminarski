@@ -24,6 +24,7 @@ public class BrokerRepository implements DbRepository<Broker> {
                 broker.setLastName(rs.getString("last_name"));
                 broker.setEmail(rs.getString("email"));
                 broker.setPhone(rs.getString("phone"));
+                broker.setPassword(rs.getString("password"));
                 broker.setCreatedAt(rs.getDate("created_at"));
                 broker.setUpdatedAt(rs.getDate("updated_at"));
                 brokers.add(broker);

@@ -19,7 +19,7 @@ import domain.Broker;
 import app.controllers.ProductController;
 
 public class ProcessClientsRequests extends Thread {
-
+    Broker loggedInBroker;
     Socket socket;
     Sender sender;
     Receiver receiver;
@@ -38,6 +38,12 @@ public class ProcessClientsRequests extends Thread {
                 Response response = new Response();
                 try {
                     switch (request.getOperation()) {
+                        case LOGIN:
+                            Broker params = (Broker) request.getArgument();
+                            Broker b = (new BrokerController()).login(params);
+                            response.setResult(b);
+                            this.loggedInBroker = b;
+                            break;
                         case GET_ALL_PRODUCTS:
                             response.setResult((new ProductController()).all());
                             break;

@@ -10,22 +10,32 @@ public class Broker implements Serializable {
     private String lastName;
     private String email;
     private String phone;
+    private String password;
     private Date createdAt;
     private Date updatedAt;
 
     public Broker() {
     }
 
-    public Broker(Long id, String first_name, String last_name, String email, String phone, Date created_at, Date updated_at) {
+    public Broker(Long id, String first_name, String last_name, String email, String phone, String password, Date created_at, Date updated_at) {
         this.id = id;
         this.firstName = first_name;
         this.lastName = last_name;
         this.email = email;
         this.phone = phone;
+        this.password = password;
         this.createdAt = created_at;
         this.updatedAt = updated_at;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
     public Long getId() {
         return id;
     }

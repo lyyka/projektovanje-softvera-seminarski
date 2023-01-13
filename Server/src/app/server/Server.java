@@ -3,11 +3,16 @@ package app.server;
 import app.thread.ProcessClientsRequests;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Server {
 
     private List<ProcessClientsRequests> pcrs;
+
+    public Server() {
+        this.pcrs = new ArrayList<>();
+    }
     
     public void startServer() {
         try {

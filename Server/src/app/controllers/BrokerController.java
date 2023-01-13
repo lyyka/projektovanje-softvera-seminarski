@@ -6,6 +6,23 @@ import java.util.List;
 
 public class BrokerController {
     private BrokerRepository repo;
+
+    public BrokerController() {
+        this.repo = new BrokerRepository();
+    }
+    
+    public Broker login(Broker params) {
+        Broker b = null;
+        
+        for(Broker br : this.repo.getAll()) {
+            if(br.getEmail().equals(params.getEmail()) && br.getPassword().equals(params.getPassword())) {
+                b = br;
+                break;
+            }
+        }
+        
+        return b;
+    }
     
     public List<Broker> all() {
         return this.repo.getAll();
