@@ -3,9 +3,12 @@ package app.server;
 import app.thread.ProcessClientsRequests;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 
 public class Server {
 
+    private List<ProcessClientsRequests> pcrs;
+    
     public void startServer() {
         try {
             ServerSocket serverSocket = new ServerSocket(9000);
@@ -21,7 +24,8 @@ public class Server {
     }
 
     private void handleClient(Socket socket) throws Exception {
-        ProcessClientsRequests processClientsRequests = new ProcessClientsRequests(socket);
-        processClientsRequests.start();
+        ProcessClientsRequests pcr = new ProcessClientsRequests(socket);
+        pcr.start();
+        this.pcrs.add(pcr);
     }
 }
