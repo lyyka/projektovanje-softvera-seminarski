@@ -53,4 +53,12 @@ public class ClientTableModel extends AbstractTableModel {
     public Client getClientAt(int i) {
         return this.clients.get(i);
     }
+    
+    public void removeClientAt(int i) {
+        this.clients.remove(i);
+    }
+    
+    public int count() {
+        return this.clients.size();
+    }
 }

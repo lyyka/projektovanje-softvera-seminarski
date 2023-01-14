@@ -54,6 +54,17 @@ public class Communication {
         }
     }
     
+    public void deleteClient(Client client) throws Exception
+    {
+        Request request = new Request(Operation.DELETE_CLIENT, client);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        
+        if(response.getException()!=null){
+            throw response.getException();
+        }
+    }
+    
     public List<Client> getAllClients() throws Exception
     {
         Request request = new Request(Operation.GET_ALL_CLIENTS, null);

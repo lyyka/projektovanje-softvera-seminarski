@@ -43,7 +43,7 @@ public class ClientRepository implements DbRepository<Client> {
     public void delete(Client client) throws Exception
     {
         try {
-            String sql = "delete from clients id=" + client.getId();
+            String sql = "delete from clients where id=" + client.getId();
             System.out.println(sql);
             Connection connection = DatabaseBroker.getInstance().getConnection();
             Statement statement = connection.createStatement();
