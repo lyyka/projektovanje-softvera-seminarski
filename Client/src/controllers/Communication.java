@@ -8,6 +8,7 @@ import communication.Sender;
 import domain.Broker;
 import domain.Client;
 import java.net.Socket;
+import java.util.List;
 
 public class Communication {
     Socket socket;
@@ -49,6 +50,18 @@ public class Communication {
         Response response=(Response)receiver.receive();
         
         if(response.getException()!=null){
+            throw response.getException();
+        }
+    }
+    
+    public List<Client> getAllClients() throws Exception
+    {
+        Request request = new Request(Operation.GET_ALL_CLIENTS, null);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        if(response.getException()==null){
+            return (List<Client>) response.getResult();
+        }else{
             throw response.getException();
         }
     }
