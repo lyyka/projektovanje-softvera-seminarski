@@ -16,12 +16,23 @@ import javax.swing.JOptionPane;
  */
 public class ClientCreateForm extends javax.swing.JDialog {
 
+    private Client c;
+    
     /**
      * Creates new form ClientCreateForm
      */
     public ClientCreateForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+    }
+
+    public void setClient(Client c) {
+        this.c = c;
+        this.firstName.setText(c.getFirstName());
+        this.lastName.setText(c.getLastName());
+        this.email.setText(c.getEmail());
+        this.phone.setText(c.getPhone());
+        this.addr.setText(c.getAddress());
     }
 
     /**
@@ -118,14 +129,16 @@ public class ClientCreateForm extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
         try {
-            Client c = new Client();
-            c.setFirstName(firstName.getText());
-            c.setLastName(lastName.getText());
-            c.setEmail(email.getText());
-            c.setPhone(phone.getText());
-            c.setAddress(addr.getText());
+            if(this.c == null) {
+                this.c = new Client();
+                this.c.setFirstName(firstName.getText());
+                this.c.setLastName(lastName.getText());
+                this.c.setEmail(email.getText());
+                this.c.setPhone(phone.getText());
+                this.c.setAddress(addr.getText());
+            }
             
-            Communication.getInstance().addClient(c);
+            Communication.getInstance().saveClient(this.c);
             
             JOptionPane.showMessageDialog(this, "Client is saved");
         } catch (Exception ex) {

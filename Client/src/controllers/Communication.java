@@ -43,7 +43,7 @@ public class Communication {
         }
     }
     
-    public void addClient(Client client) throws Exception
+    public void saveClient(Client client) throws Exception
     {
         Request request = new Request(Operation.SAVE_CLIENT, client);
         sender.send(request);

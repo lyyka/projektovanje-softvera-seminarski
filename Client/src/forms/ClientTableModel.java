@@ -50,4 +50,7 @@ public class ClientTableModel extends AbstractTableModel {
         return this.columnNames.length;
     }
     
+    public Client getClientAt(int i) {
+        return this.clients.get(i);
+    }
 }
