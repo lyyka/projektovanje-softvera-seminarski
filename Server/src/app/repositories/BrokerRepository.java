@@ -52,10 +52,10 @@ public class BrokerRepository implements DbRepository<Broker> {
             PreparedStatement statement;
             
             if(isNew) {
-                sql = "INSERT into clients (first_name, last_name, email, phone) VALUES (?,?,?,?)";
+                sql = "INSERT into brokers (first_name, last_name, email, phone) VALUES (?,?,?,?)";
                 statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             } else {
-                sql = "update clients set first_name = ?, last_name = ?, email = ?, phone = ? where id = ?";
+                sql = "update brokers set first_name = ?, last_name = ?, email = ?, phone = ? where id = ?";
                 statement = connection.prepareStatement(sql);
             }
             
@@ -83,7 +83,6 @@ public class BrokerRepository implements DbRepository<Broker> {
             
             statement.close();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             throw new Exception("Broker can not be saved!");
         }
     }

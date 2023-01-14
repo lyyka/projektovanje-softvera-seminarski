@@ -5,34 +5,29 @@
 package forms;
 
 import controllers.Communication;
-import domain.Client;
+import domain.Broker;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author kredium
- */
-public class ClientCreateForm extends javax.swing.JDialog {
+public class BrokerCreateForm extends javax.swing.JDialog {
 
-    private Client c;
+    private Broker broker;
     
     /**
      * Creates new form ClientCreateForm
      */
-    public ClientCreateForm(java.awt.Frame parent, boolean modal) {
+    public BrokerCreateForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
 
-    public void setClient(Client c) {
-        this.c = c;
+    public void setBroker(Broker c) {
+        this.broker = c;
         this.firstName.setText(c.getFirstName());
         this.lastName.setText(c.getLastName());
         this.email.setText(c.getEmail());
         this.phone.setText(c.getPhone());
-        this.addr.setText(c.getAddress());
     }
 
     /**
@@ -52,8 +47,6 @@ public class ClientCreateForm extends javax.swing.JDialog {
         email = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         phone = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        addr = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -65,8 +58,6 @@ public class ClientCreateForm extends javax.swing.JDialog {
         jLabel3.setText("Email");
 
         jLabel4.setText("Telefon");
-
-        jLabel5.setText("Adresa");
 
         jButton1.setText("Sacuvaj");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -90,8 +81,6 @@ public class ClientCreateForm extends javax.swing.JDialog {
                     .addComponent(email)
                     .addComponent(jLabel4)
                     .addComponent(phone)
-                    .addComponent(jLabel5)
-                    .addComponent(addr)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -115,12 +104,8 @@ public class ClientCreateForm extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(phone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(addr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
@@ -129,29 +114,27 @@ public class ClientCreateForm extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
         try {
-            if(this.c == null) {
-                this.c = new Client();
+            if(this.broker == null) {
+                this.broker = new Broker();
             }
             
-            this.c.setFirstName(firstName.getText());
-            this.c.setLastName(lastName.getText());
-            this.c.setEmail(email.getText());
-            this.c.setPhone(phone.getText());
-            this.c.setAddress(addr.getText());
+            this.broker.setFirstName(firstName.getText());
+            this.broker.setLastName(lastName.getText());
+            this.broker.setEmail(email.getText());
+            this.broker.setPhone(phone.getText());
             
-            Communication.getInstance().saveClient(this.c);
+            Communication.getInstance().saveBroker(this.broker);
             
-            JOptionPane.showMessageDialog(this, "Client is saved");
+            JOptionPane.showMessageDialog(this, "Broker is saved");
         } catch (Exception ex) {
-            Logger.getLogger(ClientCreateForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BrokerCreateForm.class.getName()).log(Level.SEVERE, null, ex);
             
-            JOptionPane.showMessageDialog(this, "Client is not saved");
+            JOptionPane.showMessageDialog(this, "Broker is not saved");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField addr;
     private javax.swing.JTextField email;
     private javax.swing.JTextField firstName;
     private javax.swing.JButton jButton1;
@@ -159,7 +142,6 @@ public class ClientCreateForm extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField lastName;
     private javax.swing.JTextField phone;
     // End of variables declaration//GEN-END:variables

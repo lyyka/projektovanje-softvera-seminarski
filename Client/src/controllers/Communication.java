@@ -54,6 +54,28 @@ public class Communication {
         }
     }
     
+    public void saveBroker(Broker broker) throws Exception
+    {
+        Request request = new Request(Operation.SAVE_BROKER, broker);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        
+        if(response.getException()!=null){
+            throw response.getException();
+        }
+    }
+    
+    public void deleteBroker(Broker broker) throws Exception
+    {
+        Request request = new Request(Operation.DELETE_BROKER, broker);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        
+        if(response.getException()!=null){
+            throw response.getException();
+        }
+    }
+    
     public void deleteClient(Client client) throws Exception
     {
         Request request = new Request(Operation.DELETE_CLIENT, client);
@@ -72,6 +94,18 @@ public class Communication {
         Response response=(Response)receiver.receive();
         if(response.getException()==null){
             return (List<Client>) response.getResult();
+        }else{
+            throw response.getException();
+        }
+    }
+    
+    public List<Broker> getAllBrokers() throws Exception
+    {
+        Request request = new Request(Operation.GET_ALL_BROKERS, null);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        if(response.getException()==null){
+            return (List<Broker>) response.getResult();
         }else{
             throw response.getException();
         }
