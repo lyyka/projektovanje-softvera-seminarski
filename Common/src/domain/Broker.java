@@ -93,6 +93,11 @@ public class Broker implements Serializable {
     }
 
     @Override
+    public String toString() {
+        return firstName + " " + lastName + "(" + email + ")"; 
+    }
+
+    @Override
     public int hashCode() {
         int hash = 5;
         hash = 37 * hash + Objects.hashCode(this.id);

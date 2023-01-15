@@ -7,6 +7,7 @@ package app.thread;
 
 import app.controllers.BrokerController;
 import app.controllers.ClientController;
+import app.controllers.DealController;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +18,7 @@ import communication.Sender;
 import domain.Client;
 import domain.Broker;
 import app.controllers.ProductController;
+import domain.Deal;
 import domain.Product;
 
 public class ProcessClientsRequests extends Thread {
@@ -78,6 +80,11 @@ public class ProcessClientsRequests extends Thread {
                             Broker brokerToDelete = (Broker) request.getArgument();
                             (new BrokerController()).delete(brokerToDelete);
                             response.setResult(brokerToDelete);
+                            break;
+                        case SAVE_DEAL:
+                            Deal dealToSave = (Deal) request.getArgument();
+                            (new DealController()).save(dealToSave);
+                            response.setResult(dealToSave);
                             break;
                     }
                 } catch (Exception e) {

@@ -43,6 +43,11 @@ public class Product implements Serializable {
     }
 
     @Override
+    public String toString() {
+        return title; 
+    }
+
+    @Override
     public int hashCode() {
         int hash = 7;
         hash = 23 * hash + Objects.hashCode(this.id);

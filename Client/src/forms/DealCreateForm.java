@@ -5,9 +5,14 @@
 package forms;
 
 import controllers.Communication;
+import domain.Client;
+import domain.Broker;
+import domain.Deal;
 import domain.Product;
+import enums.DealStatus;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,6 +30,46 @@ public class DealCreateForm extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         
         initProductsTable();
+        initDealStatusesDropdown();
+        initClientsDropdown();
+        initBrokersDropdown();
+    }
+    
+    private void initDealStatusesDropdown()
+    {
+        this.dealStatusCB.setModel(
+                new DefaultComboBoxModel(
+                        DealStatus.values()
+                )
+        );
+    }
+    
+    private void initClientsDropdown()
+    {
+        try {
+            this.clientCB.setModel(
+                    new DefaultComboBoxModel(
+                            Communication.getInstance().getAllClients().toArray()
+                    )
+            );
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Cannot load clients");
+            Logger.getLogger(DealCreateForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void initBrokersDropdown()
+    {
+        try {
+            this.brokerCB.setModel(
+                    new DefaultComboBoxModel(
+                            Communication.getInstance().getAllBrokers().toArray()
+                    )
+            );
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Cannot load brokers");
+            Logger.getLogger(DealCreateForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void initProductsTable()
@@ -50,7 +95,7 @@ public class DealCreateForm extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        clientCB = new javax.swing.JComboBox<>();
+        clientCB = new javax.swing.JComboBox();
         brokerCB = new javax.swing.JComboBox<>();
         dealValue = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -66,7 +111,7 @@ public class DealCreateForm extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         deleteProductBtn = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        saveDealbtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -105,7 +150,12 @@ public class DealCreateForm extends javax.swing.JDialog {
 
         jLabel7.setText("Kreiraj novi proizvod:");
 
-        jButton2.setText("SACUVAJ PRODAJNU SANSU");
+        saveDealbtn.setText("SACUVAJ PRODAJNU SANSU");
+        saveDealbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveDealbtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -114,7 +164,7 @@ public class DealCreateForm extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(saveDealbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,7 +225,7 @@ public class DealCreateForm extends javax.swing.JDialog {
                     .addComponent(deleteProductBtn)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(saveDealbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel7)
                 .addContainerGap(168, Short.MAX_VALUE))
@@ -189,7 +239,7 @@ public class DealCreateForm extends javax.swing.JDialog {
         ProductTableModel ptm = (ProductTableModel) this.productsTable.getModel();
         
         if(i >= 0) {
-            Product product = ptm.getClientAt(i);
+            Product product = ptm.getProductAt(i);
             try {
                 Communication.getInstance().deleteProduct(product);
                 ptm.removeClientAt(i);
@@ -203,14 +253,41 @@ public class DealCreateForm extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_deleteProductBtnActionPerformed
 
+    private void saveDealbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveDealbtnActionPerformed
+        Client client = (Client) this.clientCB.getSelectedItem();
+        Broker broker = (Broker) this.brokerCB.getSelectedItem();
+        Product product = ((ProductTableModel) this.productsTable.getModel())
+                .getProductAt(
+                        this.productsTable.getSelectedRow()
+                );
+        Double value = Double.valueOf(dealValue.getText());
+        DealStatus status = (DealStatus) dealStatusCB.getSelectedItem();
+        String description = descTxt.getText();
+        
+        Deal deal = new Deal();
+        deal.setClient(client);
+        deal.setBroker(broker);
+        deal.setProduct(product);
+        deal.setDealValue(value);
+        deal.setDealStatus(status);
+        deal.setDescription(description);
+        
+        try {
+            Communication.getInstance().saveDeal(deal);
+            JOptionPane.showMessageDialog(this, "Deal saved");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Deal not saved");
+            Logger.getLogger(DealCreateForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_saveDealbtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> brokerCB;
-    private javax.swing.JComboBox<String> clientCB;
+    private javax.swing.JComboBox clientCB;
     private javax.swing.JComboBox<String> dealStatusCB;
     private javax.swing.JTextField dealValue;
     private javax.swing.JButton deleteProductBtn;
     private javax.swing.JTextArea descTxt;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -221,5 +298,6 @@ public class DealCreateForm extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable productsTable;
+    private javax.swing.JButton saveDealbtn;
     // End of variables declaration//GEN-END:variables
 }

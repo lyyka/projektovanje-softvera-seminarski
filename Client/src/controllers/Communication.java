@@ -7,6 +7,7 @@ import communication.Response;
 import communication.Sender;
 import domain.Broker;
 import domain.Client;
+import domain.Deal;
 import domain.Product;
 import java.net.Socket;
 import java.util.List;
@@ -127,6 +128,17 @@ public class Communication {
     public void deleteProduct(Product product) throws Exception
     {
         Request request = new Request(Operation.DELETE_PRODUCT, product);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        
+        if(response.getException()!=null){
+            throw response.getException();
+        }
+    }
+    
+    public void saveDeal(Deal deal) throws Exception
+    {
+        Request request = new Request(Operation.SAVE_DEAL, deal);
         sender.send(request);
         Response response=(Response)receiver.receive();
         

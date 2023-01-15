@@ -93,6 +93,11 @@ public class Client implements Serializable {
     }
 
     @Override
+    public String toString() {
+        return firstName + " " + lastName + "(" + email + ")"; 
+    }
+    
+    @Override
     public int hashCode() {
         int hash = 7;
         hash = 97 * hash + Objects.hashCode(this.id);

@@ -51,6 +51,11 @@ public class ProductFeature implements Serializable {
     }
 
     @Override
+    public String toString() {
+        return title; 
+    }
+
+    @Override
     public int hashCode() {
         int hash = 3;
         hash = 17 * hash + Objects.hashCode(this.id);

@@ -43,7 +43,7 @@ public class ProductTableModel extends AbstractTableModel {
         return this.columnNames.length;
     }
     
-    public Product getClientAt(int i) {
+    public Product getProductAt(int i) {
         return this.products.get(i);
     }
     
