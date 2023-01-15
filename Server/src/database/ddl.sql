@@ -63,7 +63,7 @@ create table if not exists deals (
 	primary key (id)
 );
 
-
+	
 insert into products(title) values('Usluga 1');
 insert into products(title) values('Usluga 2');
 insert into products(title) values('Usluga 3');

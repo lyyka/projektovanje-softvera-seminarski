@@ -17,6 +17,7 @@ import communication.Sender;
 import domain.Client;
 import domain.Broker;
 import app.controllers.ProductController;
+import domain.Product;
 
 public class ProcessClientsRequests extends Thread {
     Broker loggedInBroker;
@@ -46,6 +47,11 @@ public class ProcessClientsRequests extends Thread {
                             break;
                         case GET_ALL_PRODUCTS:
                             response.setResult((new ProductController()).all());
+                            break;
+                        case DELETE_PRODUCT:
+                            Product ptod = (Product) request.getArgument();
+                            (new ProductController()).delete(ptod);
+                            response.setResult(ptod);
                             break;
                         case GET_ALL_CLIENTS:
                             response.setResult((new ClientController()).all());

@@ -7,6 +7,7 @@ import communication.Response;
 import communication.Sender;
 import domain.Broker;
 import domain.Client;
+import domain.Product;
 import java.net.Socket;
 import java.util.List;
 
@@ -107,6 +108,29 @@ public class Communication {
         if(response.getException()==null){
             return (List<Broker>) response.getResult();
         }else{
+            throw response.getException();
+        }
+    }
+    
+    public List<Product> getAllProducts() throws Exception
+    {
+        Request request = new Request(Operation.GET_ALL_PRODUCTS, null);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        if(response.getException()==null){
+            return (List<Product>) response.getResult();
+        }else{
+            throw response.getException();
+        }
+    }
+    
+    public void deleteProduct(Product product) throws Exception
+    {
+        Request request = new Request(Operation.DELETE_PRODUCT, product);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        
+        if(response.getException()!=null){
             throw response.getException();
         }
     }

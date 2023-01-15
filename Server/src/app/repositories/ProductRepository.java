@@ -25,7 +25,16 @@ public class ProductRepository implements DbRepository<Product> {
 
     @Override
     public void delete(Product param) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            String sql = "delete from products where id=" + param.getId();
+            System.out.println(sql);
+            Connection connection = DatabaseBroker.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+            statement.close();
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }
     }
 
     @Override

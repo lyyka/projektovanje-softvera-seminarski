@@ -15,6 +15,7 @@ public class MainForm extends javax.swing.JFrame {
      */
     public MainForm() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -78,6 +79,11 @@ public class MainForm extends javax.swing.JFrame {
         jMenu6.setText("Prodajne sanse");
 
         jMenuItem3.setText("Kreiraj");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu6.add(jMenuItem3);
 
         jMenuItem4.setText("Vidi sve");
@@ -136,6 +142,10 @@ public class MainForm extends javax.swing.JFrame {
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         (new BrokerViewForm(this,false)).setVisible(true);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        (new DealCreateForm(this, false)).setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
