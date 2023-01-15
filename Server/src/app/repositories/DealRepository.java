@@ -3,6 +3,7 @@ package app.repositories;
 import app.database.DatabaseBroker;
 import domain.Client;
 import domain.Deal;
+import domain.ProductFeature;
 import java.sql.*;
 import java.util.List;
 
@@ -28,6 +29,51 @@ public class DealRepository implements DbRepository<Deal> {
     public void add(Deal deal) throws Exception {
         try {
             Connection connection = DatabaseBroker.getInstance().getConnection();
+            
+            // Create new product
+            if(deal.getProduct().getId() == null) {
+                String sqlP = "INSERT INTO products (title) values (?)";
+                PreparedStatement statementP = connection.prepareStatement(sqlP, PreparedStatement.RETURN_GENERATED_KEYS);
+                statementP.setString(1, deal.getProduct().getTitle());
+                statementP.executeUpdate();
+                
+                ResultSet rsKeyP = statementP.getGeneratedKeys();
+                if (rsKeyP.next()) {
+                    Long id = rsKeyP.getLong(1);
+                    deal.getProduct().setId(id);
+                } else {
+                    throw new Exception("Product id was not generated!");
+                }
+                rsKeyP.close();
+            
+                statementP.close();
+                
+                // If the product was created successfully,
+                // create all of its features too
+                if(deal.getProduct().getId() != null) {
+                    for(ProductFeature pf : deal.getProduct().getProductFeatures()) {
+                        sqlP = "INSERT INTO product_features (product_id, title, val) values (?,?,?)";
+                        statementP = connection.prepareStatement(sqlP, PreparedStatement.RETURN_GENERATED_KEYS);
+                        statementP.setLong(1, deal.getProduct().getId());
+                        statementP.setString(2, pf.getTitle());
+                        statementP.setString(3, pf.getVal());
+                        statementP.executeUpdate();
+                
+                        rsKeyP = statementP.getGeneratedKeys();
+                        if (rsKeyP.next()) {
+                            Long id = rsKeyP.getLong(1);
+                            pf.setId(id);
+                        } else {
+                            throw new Exception("Product feature id was not generated!");
+                        }
+                        rsKeyP.close();
+
+                        statementP.close();
+                    }
+                }
+            }
+            
+            // Store the deal
             boolean isNew = deal.getId() == null;
             String sql;
             PreparedStatement statement;

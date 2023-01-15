@@ -12,8 +12,8 @@ public class ProductTableModel extends AbstractTableModel {
     private final String[] columnNames = {"ID", "Naziv"};
     private final List<Product> products;
     
-    public ProductTableModel(List<Product> clients) {
-        this.products = clients;
+    public ProductTableModel(List<Product> products) {
+        this.products = products;
     }
     
     @Override
@@ -47,7 +47,7 @@ public class ProductTableModel extends AbstractTableModel {
         return this.products.get(i);
     }
     
-    public void removeClientAt(int i) {
+    public void removeProductAt(int i) {
         this.products.remove(i);
     }
     
