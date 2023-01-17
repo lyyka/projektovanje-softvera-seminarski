@@ -1,20 +1,24 @@
 package app.server;
 
 import app.thread.ProcessClientsRequests;
+import domain.Broker;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import main.SrvFrm;
 
-public class Server {
+public class Server extends Thread {
 
     private List<ProcessClientsRequests> pcrs;
+    private SrvFrm srvFrm;
 
-    public Server() {
+    public Server(SrvFrm srvFrm) {
+        this.srvFrm = srvFrm;
         this.pcrs = new ArrayList<>();
     }
     
-    public void startServer() {
+    public void run() {
         try {
             ServerSocket serverSocket = new ServerSocket(9000);
             while (true) {
@@ -30,7 +34,20 @@ public class Server {
 
     private void handleClient(Socket socket) throws Exception {
         ProcessClientsRequests pcr = new ProcessClientsRequests(socket);
+        pcr.setSrvFrm(this.srvFrm);
         pcr.start();
         this.pcrs.add(pcr);
+    }
+    
+    public List<Broker> getLoggedInBrokers()
+    {
+        List<Broker> res = new ArrayList<>();
+        for(ProcessClientsRequests pcr : this.pcrs) {
+            System.out.println(pcr.getLoggedInBroker());
+            if(pcr.getLoggedInBroker() != null) {
+                res.add(pcr.getLoggedInBroker());
+            }
+        }
+        return res;
     }
 }

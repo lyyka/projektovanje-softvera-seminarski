@@ -142,7 +142,7 @@ public class BrokerViewForm extends javax.swing.JDialog {
         int i = this.jTable1.getSelectedRow();
         
         if(i >= 0) {
-            Broker b = this.btm.getClientAt(i);
+            Broker b = this.btm.getBrokerAt(i);
             BrokerCreateForm bcf = new BrokerCreateForm(this.parent, false);
             bcf.setBroker(b);
             bcf.setVisible(true);
@@ -157,7 +157,7 @@ public class BrokerViewForm extends javax.swing.JDialog {
         int i = this.jTable1.getSelectedRow();
         
         if(i >= 0) {
-            Broker broker = this.btm.getClientAt(i);
+            Broker broker = this.btm.getBrokerAt(i);
             try {
                 Communication.getInstance().deleteBroker(broker);
                 this.btm.removeClientAt(i);

@@ -20,12 +20,14 @@ import domain.Broker;
 import app.controllers.ProductController;
 import domain.Deal;
 import domain.Product;
+import main.SrvFrm;
 
 public class ProcessClientsRequests extends Thread {
     Broker loggedInBroker;
     Socket socket;
     Sender sender;
     Receiver receiver;
+    SrvFrm srvFrm;
 
     public ProcessClientsRequests(Socket socket) {
         this.socket = socket;        
@@ -33,6 +35,14 @@ public class ProcessClientsRequests extends Thread {
         receiver = new Receiver(socket);
     }
 
+    public void setSrvFrm(SrvFrm srvFrm) {
+        this.srvFrm = srvFrm;
+    }
+    
+    public Broker getLoggedInBroker() {
+        return loggedInBroker;
+    }
+    
     @Override
     public void run() {
         while (true) {
@@ -46,6 +56,7 @@ public class ProcessClientsRequests extends Thread {
                             Broker b = (new BrokerController()).login(params);
                             response.setResult(b);
                             this.loggedInBroker = b;
+                            this.srvFrm.refreshList();
                             break;
                         case GET_ALL_PRODUCTS:
                             response.setResult((new ProductController()).all());
