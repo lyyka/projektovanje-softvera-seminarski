@@ -96,7 +96,6 @@ public class BrokerRepository implements DbRepository<Broker> {
     public void delete(Broker broker) throws Exception {
         try {
             String sql = "delete from brokers where id=" + broker.getId();
-            System.out.println(sql);
             Connection connection = DatabaseBroker.getInstance().getConnection();
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);

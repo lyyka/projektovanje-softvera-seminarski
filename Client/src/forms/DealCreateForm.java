@@ -22,6 +22,8 @@ import javax.swing.JOptionPane;
  */
 public class DealCreateForm extends javax.swing.JDialog {
 
+    private Deal deal;
+    
     /**
      * Creates new form DealCreateForm
      */
@@ -35,6 +37,23 @@ public class DealCreateForm extends javax.swing.JDialog {
         initClientsDropdown();
         initBrokersDropdown();
         initProductFeaturesTable();
+    }
+    
+    public void setDeal(Deal deal)
+    {
+        this.deal = deal;
+        this.clientCB.setSelectedItem(deal.getClient());
+        this.brokerCB.setSelectedItem(deal.getBroker());
+        this.dealValue.setText(deal.getDealValue().toString());
+        this.dealStatusCB.setSelectedItem(deal.getDealStatus());
+        this.descTxt.setText(deal.getDescription());
+        
+        ProductTableModel ptm = (ProductTableModel) this.productsTable.getModel();
+        int i = ptm.indexOf(deal.getProduct());
+        
+        if(i >= 0) {
+            this.productsTable.setRowSelectionInterval(i, i);
+        }
     }
     
     private void initProductFeaturesTable()

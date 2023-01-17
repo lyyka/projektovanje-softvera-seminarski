@@ -2,6 +2,7 @@ package app.controllers;
 
 import app.repositories.DealRepository;
 import domain.Deal;
+import java.util.List;
 
 public class DealController {
     private DealRepository repo;
@@ -11,6 +12,9 @@ public class DealController {
         this.repo = new DealRepository();
     }
     
+    public List<Deal> all() {
+        return this.repo.getAll();
+    }
     
     public void save(Deal deal) throws Exception {
         try {

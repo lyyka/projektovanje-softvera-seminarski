@@ -54,4 +54,16 @@ public class ProductTableModel extends AbstractTableModel {
     public int count() {
         return this.products.size();
     }
+    
+    public int indexOf(Product searchFor)
+    {
+        for(int i = 0; i < this.count(); i++) {
+            Product p = this.getProductAt(i);
+            if(p.getId().equals(searchFor.getId())) {
+                return i;
+            }
+        }
+        
+        return -1;
+    }
 }

@@ -23,4 +23,5 @@ public enum Operation  implements Serializable{
     
     // Deals
     SAVE_DEAL,
+    GET_ALL_DEALS,
 }

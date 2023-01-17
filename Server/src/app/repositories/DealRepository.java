@@ -1,17 +1,100 @@
 package app.repositories;
 
 import app.database.DatabaseBroker;
+import domain.Broker;
 import domain.Client;
 import domain.Deal;
+import domain.Product;
 import domain.ProductFeature;
+import enums.DealStatus;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DealRepository implements DbRepository<Deal> {
     @Override
     public List<Deal> getAll()
     {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            String sql = "select * from deals";
+            List<Deal> deals = new ArrayList<>();
+            Connection connection = DatabaseBroker.getInstance().getConnection();
+
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                Deal deal = new Deal();
+                deal.setId(rs.getLong("id"));
+                deal.setDealValue(rs.getDouble("deal_value"));
+                deal.setDealStatus(DealStatus.valueOf(rs.getString("deal_status")));
+                deal.setDescription(rs.getString("description"));
+                deal.setCreatedAt(rs.getDate("created_at"));
+                deal.setUpdatedAt(rs.getDate("updated_at"));
+                
+                // get client
+                String sqli = "select * from clients where id = ?";
+                PreparedStatement si = connection.prepareStatement(sqli);
+                si.setLong(1, rs.getLong("client_id"));
+                ResultSet rsi = si.executeQuery();
+                if(rsi.next()) {
+                    Client client = new Client();
+                    client.setId(rsi.getLong("id"));
+                    client.setFirstName(rsi.getString("first_name"));
+                    client.setLastName(rsi.getString("last_name"));
+                    client.setEmail(rsi.getString("email"));
+                    client.setPhone(rsi.getString("phone"));
+                    client.setAddress(rsi.getString("address"));
+                    client.setCreatedAt(rsi.getDate("created_at"));
+                    client.setUpdatedAt(rsi.getDate("updated_at"));
+                    deal.setClient(client);
+                }
+                rsi.close();
+                si.close();
+                
+                // get broker
+                sqli = "select * from brokers where id = ?";
+                si = connection.prepareStatement(sqli);
+                si.setLong(1, rs.getLong("broker_id"));
+                rsi = si.executeQuery();
+                if(rsi.next()) {
+                    Broker broker = new Broker();
+                    broker.setId(rsi.getLong("id"));
+                    broker.setFirstName(rsi.getString("first_name"));
+                    broker.setLastName(rsi.getString("last_name"));
+                    broker.setEmail(rsi.getString("email"));
+                    broker.setPhone(rsi.getString("phone"));
+                    broker.setPassword(rsi.getString("password"));
+                    broker.setCreatedAt(rsi.getDate("created_at"));
+                    broker.setUpdatedAt(rsi.getDate("updated_at"));
+                    deal.setBroker(broker);
+                }
+                rsi.close();
+                si.close();
+                
+                // get product
+                sqli = "select * from products where id = ?";
+                si = connection.prepareStatement(sqli);
+                si.setLong(1, rs.getLong("product_id"));
+                rsi = si.executeQuery();
+                if(rsi.next()) {
+                    Product product = new Product();
+                    product.setId(rsi.getLong("id"));
+                    product.setTitle(rsi.getString("title"));
+                    deal.setProduct(product);
+                }
+                rsi.close();
+                si.close();
+                
+                deals.add(deal);
+            }
+            rs.close();
+            statement.close();
+           
+            return deals;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
    
     @Override

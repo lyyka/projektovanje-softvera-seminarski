@@ -86,6 +86,9 @@ public class ProcessClientsRequests extends Thread {
                             (new DealController()).save(dealToSave);
                             response.setResult(dealToSave);
                             break;
+                        case GET_ALL_DEALS:
+                            response.setResult((new DealController()).all());
+                            break;
                     }
                 } catch (Exception e) {
                     response.setException(e);
