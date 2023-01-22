@@ -56,7 +56,39 @@ public class ClientRepository implements DbRepository<Client> {
 
     @Override
     public List<Client> getAll(Client param) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            String sql = "select * from clients where first_name like ? or last_name like ? or email like ? or phone like ? or address like ?";
+            List<Client> clients = new ArrayList<>();
+            Connection connection = DatabaseBroker.getInstance().getConnection();
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, "%" + param.getFirstName() + "%");
+            statement.setString(2, "%" + param.getLastName() + "%");
+            statement.setString(3, "%" + param.getEmail() + "%");
+            statement.setString(4, "%" + param.getPhone() + "%");
+            statement.setString(5, "%" + param.getAddress() + "%");
+            
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Client client = new Client();
+                client.setId(rs.getLong("id"));
+                client.setFirstName(rs.getString("first_name"));
+                client.setLastName(rs.getString("last_name"));
+                client.setEmail(rs.getString("email"));
+                client.setPhone(rs.getString("phone"));
+                client.setAddress(rs.getString("address"));
+                client.setCreatedAt(rs.getDate("created_at"));
+                client.setUpdatedAt(rs.getDate("updated_at"));
+                clients.add(client);
+            }
+            rs.close();
+            statement.close();
+           
+            return clients;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override

@@ -24,11 +24,18 @@ public class BrokerCreateForm extends javax.swing.JDialog {
     }
 
     public void setBroker(Broker c) {
-        this.broker = c;
-        this.firstName.setText(c.getFirstName());
-        this.lastName.setText(c.getLastName());
-        this.email.setText(c.getEmail());
-        this.phone.setText(c.getPhone());
+        try { 
+            this.broker = c;
+            this.firstName.setText(c.getFirstName());
+            this.lastName.setText(c.getLastName());
+            this.email.setText(c.getEmail());
+            this.phone.setText(c.getPhone());
+            this.pwdI.setText(c.getPassword());
+            
+            JOptionPane.showMessageDialog(this, "Sistem je uspesno ucitao prodavca");
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita prodavca");
+        }
     }
 
     /**
@@ -50,6 +57,8 @@ public class BrokerCreateForm extends javax.swing.JDialog {
         phone = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        pwdI = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -70,38 +79,45 @@ public class BrokerCreateForm extends javax.swing.JDialog {
 
         jLabel5.setText("KREIRAJ PRODAVCA");
 
+        jLabel6.setText("Sifra:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(firstName)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(lastName)
-                    .addComponent(jLabel3)
-                    .addComponent(email)
-                    .addComponent(jLabel4)
-                    .addComponent(phone)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel5)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pwdI)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(firstName)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(lastName)
+                            .addComponent(jLabel3)
+                            .addComponent(email)
+                            .addComponent(jLabel4)
+                            .addComponent(phone)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(17, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -113,7 +129,11 @@ public class BrokerCreateForm extends javax.swing.JDialog {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(phone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pwdI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -132,14 +152,15 @@ public class BrokerCreateForm extends javax.swing.JDialog {
             this.broker.setLastName(lastName.getText());
             this.broker.setEmail(email.getText());
             this.broker.setPhone(phone.getText());
+            this.broker.setPassword(pwdI.getText());
             
             Communication.getInstance().saveBroker(this.broker);
             
-            JOptionPane.showMessageDialog(this, "Broker is saved");
+            JOptionPane.showMessageDialog(this, "Sistem je zapamtio prodavca");
         } catch (Exception ex) {
             Logger.getLogger(BrokerCreateForm.class.getName()).log(Level.SEVERE, null, ex);
             
-            JOptionPane.showMessageDialog(this, "Broker is not saved");
+            JOptionPane.showMessageDialog(this, "Sistem ne moze da zapamti podatke o prodavcu");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -153,7 +174,9 @@ public class BrokerCreateForm extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JTextField lastName;
     private javax.swing.JTextField phone;
+    private javax.swing.JTextField pwdI;
     // End of variables declaration//GEN-END:variables
 }

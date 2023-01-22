@@ -40,7 +40,7 @@ public class ClientController {
         }
     }
     
-    public void search() {
-        
+    public List<Client> search(Client client) throws Exception {
+        return this.repo.getAll(client);
     }
 }

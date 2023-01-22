@@ -52,7 +52,8 @@ public class BrokerController {
         }
     }
     
-    public void search() {
-        
+    public List<Broker> search(Broker client) throws Exception {
+        System.out.println("Search2");
+        return this.repo.getAll(client);
     }
 }

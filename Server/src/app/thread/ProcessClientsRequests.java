@@ -69,6 +69,10 @@ public class ProcessClientsRequests extends Thread {
                         case GET_ALL_CLIENTS:
                             response.setResult((new ClientController()).all());
                             break;
+                        case SEARCH_CLIENTS:
+                            Client searchParamClient = (Client) request.getArgument();
+                            response.setResult((new ClientController()).search(searchParamClient));
+                            break;
                         case SAVE_CLIENT:
                             Client clientToSave = (Client) request.getArgument();
                             (new ClientController()).save(clientToSave);
@@ -81,6 +85,11 @@ public class ProcessClientsRequests extends Thread {
                             break;
                         case GET_ALL_BROKERS:
                             response.setResult((new BrokerController()).all());
+                            break;
+                        case SEARCH_BROKERS:
+                            System.out.println("Search1");
+                            Broker searchParamBroker = (Broker) request.getArgument();
+                            response.setResult((new BrokerController()).search(searchParamBroker));
                             break;
                         case SAVE_BROKER:
                             Broker brokerToSave = (Broker) request.getArgument();

@@ -67,6 +67,8 @@ public class ClientViewForm extends javax.swing.JDialog {
         deleteBtn = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        searchField = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -103,6 +105,14 @@ public class ClientViewForm extends javax.swing.JDialog {
 
         jLabel1.setText("SVI KLIJENTI");
 
+        searchField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Pretraga:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -111,23 +121,31 @@ public class ClientViewForm extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(searchField)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(editBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(deleteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                            .addComponent(deleteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
                             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(9, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(editBtn)
@@ -167,14 +185,41 @@ public class ClientViewForm extends javax.swing.JDialog {
                 this.ctm.removeClientAt(i);
                 this.jTable1.setModel(this.ctm);
                 this.updateInterface();
-                JOptionPane.showMessageDialog(this, "Client deleted");
+                JOptionPane.showMessageDialog(this, "Sistem je obrisao klijenta");
             } catch (Exception ex) {
                 Logger.getLogger(ClientViewForm.class.getName()).log(Level.SEVERE, null, ex);
                 
-                JOptionPane.showMessageDialog(this, "Client not deleted");
+                JOptionPane.showMessageDialog(this, "Sistem ne moze da obrise klijenta");
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
+
+    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
+        try {
+            Client param = new Client();
+            param.setFirstName(searchField.getText());
+            param.setLastName(searchField.getText());
+            param.setEmail(searchField.getText());
+            param.setPhone(searchField.getText());
+            param.setAddress(searchField.getText());
+            
+            this.ctm = new ClientTableModel(
+                    Communication.getInstance().getAllClients(param)
+            );
+
+            this.jTable1.setModel(this.ctm);
+
+            this.updateInterface();
+            
+            if(this.ctm.count() == 0) {
+                JOptionPane.showMessageDialog(this, "Sistem nije pronasao ni jednog klijenta po zadatoj vrednosti");
+            } else {
+                JOptionPane.showMessageDialog(this, "Sistem je pronasao klijente po zadatoj vrednosti");
+            }
+         } catch (Exception ex) {
+             Logger.getLogger(ClientViewForm.class.getName()).log(Level.SEVERE, null, ex);
+         }
+    }//GEN-LAST:event_searchFieldActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -182,7 +227,9 @@ public class ClientViewForm extends javax.swing.JDialog {
     private javax.swing.JButton editBtn;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField searchField;
     // End of variables declaration//GEN-END:variables
 }

@@ -113,9 +113,33 @@ public class Communication {
         }
     }
     
+    public List<Client> getAllClients(Client param) throws Exception
+    {
+        Request request = new Request(Operation.SEARCH_CLIENTS, param);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        if(response.getException()==null){
+            return (List<Client>) response.getResult();
+        }else{
+            throw response.getException();
+        }
+    }
+    
     public List<Broker> getAllBrokers() throws Exception
     {
         Request request = new Request(Operation.GET_ALL_BROKERS, null);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        if(response.getException()==null){
+            return (List<Broker>) response.getResult();
+        }else{
+            throw response.getException();
+        }
+    }
+    
+    public List<Broker> getAllBrokers(Broker param) throws Exception
+    {
+        Request request = new Request(Operation.SEARCH_BROKERS, param);
         sender.send(request);
         Response response=(Response)receiver.receive();
         if(response.getException()==null){

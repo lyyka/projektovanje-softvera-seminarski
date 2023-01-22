@@ -398,9 +398,10 @@ public class DealCreateForm extends javax.swing.JDialog {
         
         try {
             Communication.getInstance().saveDeal(deal);
-            JOptionPane.showMessageDialog(this, "Deal saved");
+            JOptionPane.showMessageDialog(this, "Sistem ne moze da zapamti podatke o prodajnoj sansi za klijenta");
+            //JOptionPane.showMessageDialog(this, "Sistem je uspesno zapamtio podatke o prodajnoj sansi za klijenta");
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Deal not saved");
+            JOptionPane.showMessageDialog(this, "Sistem ne moze da zapamti podatke o prodajnoj sansi za klijenta");
             Logger.getLogger(DealCreateForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_saveDealbtnActionPerformed

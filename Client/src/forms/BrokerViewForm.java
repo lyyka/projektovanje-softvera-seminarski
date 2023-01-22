@@ -63,6 +63,8 @@ public class BrokerViewForm extends javax.swing.JDialog {
         deleteBtn = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        searchField = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -99,6 +101,14 @@ public class BrokerViewForm extends javax.swing.JDialog {
 
         jLabel1.setText("SVI PRODAVCI");
 
+        searchField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Pretraga:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -107,23 +117,31 @@ public class BrokerViewForm extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(searchField)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(editBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(deleteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                            .addComponent(deleteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(11, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(editBtn)
@@ -159,18 +177,45 @@ public class BrokerViewForm extends javax.swing.JDialog {
         if(i >= 0) {
             Broker broker = this.btm.getBrokerAt(i);
             try {
+                JOptionPane.showMessageDialog(this, "Sistem ne moze da izbrise prodavca");
                 Communication.getInstance().deleteBroker(broker);
                 this.btm.removeClientAt(i);
                 this.jTable1.setModel(this.btm);
                 this.updateInterface();
-                JOptionPane.showMessageDialog(this, "Broker deleted");
+                JOptionPane.showMessageDialog(this, "Sistem je uspesno izbrisao prodavca");
             } catch (Exception ex) {
                 Logger.getLogger(BrokerViewForm.class.getName()).log(Level.SEVERE, null, ex);
                 
-                JOptionPane.showMessageDialog(this, "Broker not deleted");
+                JOptionPane.showMessageDialog(this, "Sistem ne moze da izbrise prodavca");
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
+
+    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
+        Broker param = new Broker();
+        param.setFirstName(searchField.getText());
+        param.setLastName(searchField.getText());
+        param.setEmail(searchField.getText());
+        param.setPhone(searchField.getText());
+        
+        try {
+            this.btm = new BrokerTableModel(
+                    Communication.getInstance().getAllBrokers(param)
+            );
+        
+            this.jTable1.setModel(this.btm);
+            
+            this.updateInterface();
+            
+            if(this.btm.count() == 0) {
+                JOptionPane.showMessageDialog(this, "Sistem nije pronasao ni jednog prodavca po zadatoj vrednosti");
+            } else {
+                JOptionPane.showMessageDialog(this, "Sistem je pronasao prodavce po zadatoj vrednosti");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(BrokerViewForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_searchFieldActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -178,7 +223,9 @@ public class BrokerViewForm extends javax.swing.JDialog {
     private javax.swing.JButton editBtn;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField searchField;
     // End of variables declaration//GEN-END:variables
 }

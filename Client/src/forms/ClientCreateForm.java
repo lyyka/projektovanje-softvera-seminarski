@@ -6,6 +6,7 @@ package forms;
 
 import controllers.Communication;
 import domain.Client;
+import java.awt.HeadlessException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -28,12 +29,18 @@ public class ClientCreateForm extends javax.swing.JDialog {
     }
 
     public void setClient(Client c) {
-        this.c = c;
-        this.firstName.setText(c.getFirstName());
-        this.lastName.setText(c.getLastName());
-        this.email.setText(c.getEmail());
-        this.phone.setText(c.getPhone());
-        this.addr.setText(c.getAddress());
+        try {
+            this.c = c;
+            this.firstName.setText(c.getFirstName());
+            this.lastName.setText(c.getLastName());
+            this.email.setText(c.getEmail());
+            this.phone.setText(c.getPhone());
+            this.addr.setText(c.getAddress());
+            
+            JOptionPane.showMessageDialog(this, "Sistem je uspesno ucitao klijenta");
+        } catch(HeadlessException e) {
+            JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita klijenta");
+        }
     }
 
     /**
@@ -151,11 +158,11 @@ public class ClientCreateForm extends javax.swing.JDialog {
             
             Communication.getInstance().saveClient(this.c);
             
-            JOptionPane.showMessageDialog(this, "Client is saved");
+            JOptionPane.showMessageDialog(this, "Sistem je zapamtio klijenta");
         } catch (Exception ex) {
             Logger.getLogger(ClientCreateForm.class.getName()).log(Level.SEVERE, null, ex);
             
-            JOptionPane.showMessageDialog(this, "Client is not saved");
+            JOptionPane.showMessageDialog(this, "Sistem ne moze da zapamti klijenta");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
