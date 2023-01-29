@@ -1,5 +1,6 @@
 package domain;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -152,7 +153,6 @@ public class Client implements GenericEntity {
         return Objects.equals(this.updatedAt, other.updatedAt);
     }
 
-
     @Override
     public String getTableName() {
         return "clients";
@@ -160,32 +160,103 @@ public class Client implements GenericEntity {
     
     @Override
     public String getColumnNamesForInsert() {
-        return "first_name,last_name,email,phone";
+        return "first_name,last_name,email,phone,address";
     }
 
     @Override
-    public String getInsertValues() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("'").append(firstName).append("',")
-            .append("'").append(lastName).append("',")
-            .append("'").append(email).append("',")
-            .append("'").append(phone).append("',");
-        return sb.toString();
+    public void bindInsertValues(PreparedStatement ps) {
+        try {
+            ps.setString(1, firstName);
+            ps.setString(2, lastName);
+            ps.setString(3, email);
+            ps.setString(4, phone);
+            ps.setString(5, address);
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public String getUpdateValues() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("first_name = ").append("'").append(firstName).append("'").append(",")
-            .append("last_name = ").append("'").append(lastName).append("'").append(",")
-            .append("email = ").append("'").append(email).append("'").append(",")
-            .append("phone = ").append("'").append(phone).append("'").append(",");
-        return sb.toString();
+        return "first_name,last_name,email,phone,address";
+    }
+
+    @Override
+    public void bindUpdateValues(PreparedStatement ps) {
+        try {
+            ps.setString(1, firstName);
+            ps.setString(2, lastName);
+            ps.setString(3, email);
+            ps.setString(4, phone);
+            ps.setString(5, address);
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @Override
     public String getColumnNamesForSelect() {
-        return "id,first_name,last_name,email,phone,created_at,updated_at";
+        return "id,first_name,last_name,email,phone,address,created_at,updated_at";
+    }
+
+    @Override
+    public String getWhereClauseForSelect() {
+        if(this.getId() != null) {
+            return "id = ?";
+        }
+        
+        List<String> wheres = new ArrayList<>();
+        
+        if(firstName != null) {
+            wheres.add("first_name like ?");
+        }
+
+        if(lastName != null) {
+            wheres.add("last_name like ?");
+        }
+
+        if(email != null) {
+            wheres.add("email like ?");
+        }
+
+        if(phone != null) {
+            wheres.add("phone like ?");
+        }
+        
+        return String.join(" or ", wheres);
+    }
+
+    @Override
+    public void bindWhereClauseValuesForSelect(PreparedStatement ps) {
+        try {
+            if(this.getId() != null) {
+                ps.setLong(1, this.getId());
+            } else {
+                int i = 1;
+                
+                if(firstName != null) {
+                    ps.setString(i, "%" + firstName + "%");
+                    i++;
+                }
+
+                if(lastName != null) {
+                    ps.setString(i, "%" + lastName + "%");
+                    i++;
+                }
+
+                if(email != null) {
+                    ps.setString(i, "%" + email + "%");
+                    i++;
+                }
+
+                if(phone != null) {
+                    ps.setString(i, "%" + phone + "%");
+                    i++;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -197,38 +268,12 @@ public class Client implements GenericEntity {
             client.setLastName(rs.getString("last_name"));
             client.setEmail(rs.getString("email"));
             client.setPhone(rs.getString("phone"));
+            client.setAddress(rs.getString("address"));
             client.setCreatedAt(rs.getDate("created_at"));
             client.setUpdatedAt(rs.getDate("updated_at"));
         } catch (SQLException ex) {
             Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
         }
         return client;
-    }
-
-    @Override
-    public String getWhereClauseForSelect() {
-        List<String> wheres = new ArrayList<>();
-        
-        if(firstName != null) {
-            wheres.add("first_name like '%" + firstName + "'%");
-        }
-        
-        if(lastName != null) {
-            wheres.add("last_name like '%" + lastName + "'%");
-        }
-        
-        if(email != null) {
-            wheres.add("email like '%" + email + "'%");
-        }
-        
-        if(phone != null) {
-            wheres.add("phone like '%" + phone + "'%");
-        }
-        
-        if(address != null) {
-            wheres.add("address like '%" + address + "'%");
-        }
-        
-        return String.join(" or ", wheres);
     }
 }

@@ -83,7 +83,7 @@ public class DealCreateForm extends javax.swing.JDialog {
                     )
             );
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Cannot load clients");
+            JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita klijente");
             Logger.getLogger(DealCreateForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -97,7 +97,7 @@ public class DealCreateForm extends javax.swing.JDialog {
                     )
             );
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Cannot load brokers");
+            JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita prodavce");
             Logger.getLogger(DealCreateForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -111,7 +111,7 @@ public class DealCreateForm extends javax.swing.JDialog {
                     )
             );
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Cannot load products");
+            JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita proizvode");
             Logger.getLogger(DealCreateForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -152,6 +152,7 @@ public class DealCreateForm extends javax.swing.JDialog {
         saveDealbtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setSize(new java.awt.Dimension(0, 360));
 
         jLabel5.setText("Klijent:");
 
@@ -248,7 +249,7 @@ public class DealCreateForm extends javax.swing.JDialog {
                                     .addComponent(jLabel3)
                                     .addComponent(jScrollPane1)))
                             .addComponent(jScrollPane2))
-                        .addGap(167, 167, 167))
+                        .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -256,7 +257,7 @@ public class DealCreateForm extends javax.swing.JDialog {
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 618, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(addPfs, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                                    .addComponent(addPfs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(removePfs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -264,7 +265,7 @@ public class DealCreateForm extends javax.swing.JDialog {
                                     .addComponent(jLabel7)
                                     .addComponent(npTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel9))
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(0, 602, Short.MAX_VALUE))))
                     .addComponent(saveDealbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
@@ -310,7 +311,7 @@ public class DealCreateForm extends javax.swing.JDialog {
                         .addComponent(addPfs)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(removePfs)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(saveDealbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(67, 67, 67))
         );
@@ -322,14 +323,15 @@ public class DealCreateForm extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 756, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 908, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 697, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 733, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -359,18 +361,20 @@ public class DealCreateForm extends javax.swing.JDialog {
         DealStatus status = (DealStatus) dealStatusCB.getSelectedItem();
         String description = descTxt.getText();
         
-        Deal deal = new Deal();
-        deal.setClient(client);
-        deal.setBroker(broker);
-        deal.setProduct(product);
-        deal.setDealValue(value);
-        deal.setDealStatus(status);
-        deal.setDescription(description);
+        if(this.deal == null) {
+            this.deal = new Deal();
+        }
+        
+        this.deal.setClient(client);
+        this.deal.setBroker(broker);
+        this.deal.setProduct(product);
+        this.deal.setDealValue(value);
+        this.deal.setDealStatus(status);
+        this.deal.setDescription(description);
         
         try {
-            Communication.getInstance().saveDeal(deal);
-            JOptionPane.showMessageDialog(this, "Sistem ne moze da zapamti podatke o prodajnoj sansi za klijenta");
-            //JOptionPane.showMessageDialog(this, "Sistem je uspesno zapamtio podatke o prodajnoj sansi za klijenta");
+            Communication.getInstance().saveDeal(this.deal);
+            JOptionPane.showMessageDialog(this, "Sistem je uspesno zapamtio podatke o prodajnoj sansi za klijenta");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Sistem ne moze da zapamti podatke o prodajnoj sansi za klijenta");
             Logger.getLogger(DealCreateForm.class.getName()).log(Level.SEVERE, null, ex);

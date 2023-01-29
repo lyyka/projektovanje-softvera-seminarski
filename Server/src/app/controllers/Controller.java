@@ -3,6 +3,7 @@ package app.controllers;
 import app.repositories.GenericRepository;
 import domain.Broker;
 import domain.Client;
+import domain.Deal;
 import domain.Product;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,10 @@ import operations.clients.LoadAllClientsOperation;
 import operations.clients.LoadClientOperation;
 import operations.clients.SearchClientsOperation;
 import operations.clients.UpdateClientOperation;
+import operations.deals.LoadAllDealsOperation;
+import operations.deals.LoadDealOperation;
+import operations.deals.SaveDealOperation;
+import operations.deals.SearchDealsOperation;
 import operations.products.LoadAllProductsOperation;
 
 public class Controller {
@@ -191,6 +196,54 @@ public class Controller {
         try {
             LoadAllProductsOperation o = new LoadAllProductsOperation();
             o.execute(new Product());
+            return o.getResult();
+        } catch (Exception ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return new ArrayList<>();
+    }
+    
+    public Deal loadDeal(Deal deal)
+    {
+        try {
+            LoadDealOperation op = new LoadDealOperation();
+            op.execute(deal);
+            return op.getResult();
+        } catch (Exception ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return deal;
+    }
+    
+    public void saveDeal(Deal d)
+    {
+        try {
+            (new SaveDealOperation()).execute(d);
+        } catch (Exception ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public List<Deal> searchDeals(Deal d)
+    {
+        try {
+            SearchDealsOperation o = new SearchDealsOperation();
+            o.execute(d);
+            return o.getResult();
+        } catch (Exception ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return new ArrayList<>();
+    }
+    
+    public List<Deal> loadAllDeals()
+    {
+        try {
+            LoadAllDealsOperation o = new LoadAllDealsOperation();
+            o.execute(new Deal());
             return o.getResult();
         } catch (Exception ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);

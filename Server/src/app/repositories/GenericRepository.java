@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,20 +17,29 @@ public class GenericRepository<T extends GenericEntity> implements DbRepository<
         try {
             Connection connection = DatabaseBroker.getInstance().getConnection();
             
+            String columnsToInsert = param.getColumnNamesForInsert();
+            
+            String[] cols = columnsToInsert.split(",");
+            for(int i = 0; i < cols.length; i++) {
+                cols[i] = "?";
+            }
+            
             StringBuilder sb = new StringBuilder();
             
             sb.append("INSERT INTO ")
                     .append(param.getTableName())
-                    .append(" (").append(param.getColumnNamesForInsert()).append(")")
+                    .append(" (").append(columnsToInsert).append(")")
                     .append(" VALUES (")
-                    .append(param.getInsertValues())
+                    .append(String.join(",", cols))
                     .append(");");
             
             String query = sb.toString();
             
-            Statement statement = connection.createStatement();
+            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             
-            statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+            param.bindInsertValues(statement);
+            
+            statement.executeUpdate();
             
             ResultSet rsKey = statement.getGeneratedKeys();
             
@@ -66,14 +76,15 @@ public class GenericRepository<T extends GenericEntity> implements DbRepository<
             
             String sql = sb.toString();
             
-            List<T> ges = new ArrayList<>();
-            
             Connection connection = DatabaseBroker.getInstance().getConnection();
 
-            Statement statement = connection.createStatement();
+            PreparedStatement statement = connection.prepareStatement(sql);
             
-            ResultSet rs = statement.executeQuery(sql);
+            param.bindWhereClauseValuesForSelect(statement);
             
+            ResultSet rs = statement.executeQuery();
+            
+            List<T> ges = new ArrayList<>();
             while (rs.next()) {
                 ges.add((T) param.newFromResultSet(rs));
             }
@@ -93,20 +104,29 @@ public class GenericRepository<T extends GenericEntity> implements DbRepository<
         try {
             Connection connection = DatabaseBroker.getInstance().getConnection();
             
+            String columnsToUpdate = param.getUpdateValues();
+            
+            String[] cols = columnsToUpdate.split(",");
+            for(int i = 0; i < cols.length; i++) {
+                cols[i] = cols[i] + " = ?";
+            }
+            
             StringBuilder sb = new StringBuilder();
             
             sb.append("update ")
                     .append(param.getTableName())
                     .append(" set ")
-                    .append(param.getUpdateValues())
-                    .append(" where id = ")
-                    .append(param.getId()).append(";");
+                    .append(String.join(",", cols))
+                    .append(" where id = ?;");
             
             String query = sb.toString();
             
-            Statement statement = connection.createStatement();
+            PreparedStatement statement = connection.prepareStatement(query);
             
-            statement.executeUpdate(query);
+            param.bindUpdateValues(statement);
+            statement.setLong(cols.length + 1, param.getId());
+            
+            statement.executeUpdate();
             
             statement.close();
         } catch (SQLException ex) {
@@ -117,10 +137,11 @@ public class GenericRepository<T extends GenericEntity> implements DbRepository<
     @Override
     public void delete(T param) throws Exception {
         try {
-            String sql = "delete from " + param.getTableName() + " where id = " + param.getId() + ";";
+            String sql = "delete from " + param.getTableName() + " where id = ?;";
             Connection connection = DatabaseBroker.getInstance().getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, param.getId());
+            statement.executeUpdate();
             statement.close();
         } catch (Exception ex) {
             throw new Exception(ex.getMessage());

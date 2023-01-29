@@ -15,6 +15,7 @@ import communication.Response;
 import communication.Sender;
 import domain.Client;
 import domain.Broker;
+import domain.Deal;
 import main.SrvFrm;
 
 public class ProcessClientsRequests extends Thread {
@@ -106,14 +107,22 @@ public class ProcessClientsRequests extends Thread {
                             Controller.getInstance().deleteBroker(brokerToDelete);
                             response.setResult(brokerToDelete);
                             break;
-//                        case SAVE_DEAL:
-//                            Deal dealToSave = (Deal) request.getArgument();
-//                            (new DealController()).save(dealToSave);
-//                            response.setResult(dealToSave);
-//                            break;
-//                        case GET_ALL_DEALS:
-//                            response.setResult((new DealController()).all());
-//                            break;
+                        case LOAD_DEAL:
+                            Deal dealToLoad = (Deal) request.getArgument();
+                            response.setResult(Controller.getInstance().loadDeal(dealToLoad));
+                            break;
+                        case SEARCH_DEALS:
+                            Deal searchParamDeal = (Deal) request.getArgument();
+                            response.setResult(Controller.getInstance().searchDeals(searchParamDeal));
+                            break;
+                        case SAVE_DEAL:
+                            Deal dealToSave = (Deal) request.getArgument();
+                            Controller.getInstance().saveDeal(dealToSave);
+                            response.setResult(dealToSave);
+                            break;
+                        case GET_ALL_DEALS:
+                            response.setResult(Controller.getInstance().loadAllDeals());
+                            break;
                     }
                 } catch (Exception e) {
                     response.setException(e);

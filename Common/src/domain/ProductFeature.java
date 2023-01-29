@@ -1,5 +1,6 @@
 package domain;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -94,49 +95,42 @@ public class ProductFeature implements GenericEntity {
         return Objects.equals(this.product, other.product);
     }
 
-
     @Override
     public String getTableName() {
-        return "product_features";
+        return "products";
     }
     
     @Override
     public String getColumnNamesForInsert() {
-        return "title,val";
+        return "title";
     }
 
     @Override
-    public String getInsertValues() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("'").append(title).append("',");
-        sb.append("'").append(val).append("',");
-        return sb.toString();
+    public void bindInsertValues(PreparedStatement ps) {
+        try {
+            ps.setString(1, title);
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public String getUpdateValues() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("title = ").append("'").append(title).append("'").append(",")
-                .append("val = ").append("'").append(val).append("'").append(",");
-        return sb.toString();
+        return "title";
+    }
+
+    @Override
+    public void bindUpdateValues(PreparedStatement ps) {
+        try {
+            ps.setString(1, title);
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @Override
     public String getColumnNamesForSelect() {
-        return "id,title,val";
-    }
-
-    @Override
-    public GenericEntity newFromResultSet(ResultSet rs) {
-        ProductFeature pf = new ProductFeature();
-        try {
-            pf.setId(rs.getLong("id"));
-            pf.setTitle(rs.getString("title"));
-            pf.setVal(rs.getString("val"));
-        } catch (SQLException ex) {
-            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return pf;
+        return "id,title";
     }
 
     @Override
@@ -144,19 +138,49 @@ public class ProductFeature implements GenericEntity {
         List<String> wheres = new ArrayList<>();
         
         if(title != null) {
-            wheres.add("title like '%" + title + "'%");
+            wheres.add("title like ?");
         }
         
         String res = String.join(" or ", wheres);
         
         if(product != null) {
             if(res.length() > 0) {
-                return "(" + res + ") and product_id = " + product.getId();
+                return "(" + res + ") and product_id = ?";
             } else {
-                return "product_id = " + product.getId();
+                return "product_id = ?";
             }
         }
         
         return res;
+    }
+
+    @Override
+    public void bindWhereClauseValuesForSelect(PreparedStatement ps) {
+        try {
+            int i = 1;
+            
+            if(title != null) {
+                ps.setString(i, "%" + title + "%");
+                i++;
+            }
+
+            if(product != null) {
+                ps.setLong(i, product.getId());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public GenericEntity newFromResultSet(ResultSet rs) {
+        Product product = new Product();
+        try {
+            product.setId(rs.getLong("id"));
+            product.setTitle(rs.getString("title"));
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return product;
     }
 }

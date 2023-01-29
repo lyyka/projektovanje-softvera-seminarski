@@ -12,6 +12,7 @@ public class SrvFrm extends javax.swing.JFrame {
     public SrvFrm() {
         initComponents();
         setLocationRelativeTo(null);
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     }
     
     public void refreshList()

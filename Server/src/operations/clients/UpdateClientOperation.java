@@ -11,12 +11,21 @@ public class UpdateClientOperation extends AbstractOperation {
             throw new Exception("Invalid client data!");
         }
         
-        // todo: validate other params
+        Client c = (Client) param;
+        
+        boolean isValid = (c.getFirstName() != null && c.getFirstName().length() >= 2) &&
+                (c.getLastName() != null && c.getLastName().length() >= 2) &&
+                (c.getEmail() != null && c.getEmail().contains("@") && c.getEmail().length() >= 2) &&
+                (c.getPhone() != null && c.getPhone().length() >= 2);
+        
+        if(!isValid) {
+            throw new Exception("Invalid broker data!");
+        }
     }
 
     @Override
     protected void executeOperation(Object param) throws Exception {
-        this.repository.add((Client) param);
+        this.repository.edit((Client) param);
     }
 
 }

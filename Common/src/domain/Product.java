@@ -1,5 +1,6 @@
 package domain;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -81,7 +82,6 @@ public class Product implements GenericEntity {
         return Objects.equals(this.productFeatures, other.productFeatures);
     }
 
-
     @Override
     public String getTableName() {
         return "products";
@@ -93,22 +93,61 @@ public class Product implements GenericEntity {
     }
 
     @Override
-    public String getInsertValues() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("'").append(title).append("',");
-        return sb.toString();
+    public void bindInsertValues(PreparedStatement ps) {
+        try {
+            ps.setString(1, title);
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public String getUpdateValues() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("title = ").append("'").append(title).append("'").append(",");
-        return sb.toString();
+        return "title";
+    }
+
+    @Override
+    public void bindUpdateValues(PreparedStatement ps) {
+        try {
+            ps.setString(1, title);
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @Override
     public String getColumnNamesForSelect() {
         return "id,title";
+    }
+
+    @Override
+    public String getWhereClauseForSelect() {
+        if(this.getId() != null) {
+            return "id = ?";
+        }
+        
+        List<String> wheres = new ArrayList<>();
+        
+        if(title != null) {
+            wheres.add("title like ?");
+        }
+        
+        return String.join(" or ", wheres);
+    }
+
+    @Override
+    public void bindWhereClauseValuesForSelect(PreparedStatement ps) {
+        try {
+            if(this.getId() != null) {
+                ps.setLong(1, this.getId());
+            } else {
+                if(title != null) {
+                    ps.setString(1, "%" + title + "%");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -121,16 +160,5 @@ public class Product implements GenericEntity {
             Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
         }
         return product;
-    }
-
-    @Override
-    public String getWhereClauseForSelect() {
-        List<String> wheres = new ArrayList<>();
-        
-        if(title != null) {
-            wheres.add("title like '%" + title + "'%");
-        }
-        
-        return String.join(" or ", wheres);
     }
 }

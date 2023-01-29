@@ -24,6 +24,7 @@ public enum Operation  implements Serializable{
     SEARCH_BROKERS,
     
     // Deals
+    LOAD_DEAL,
     SAVE_DEAL,
     GET_ALL_DEALS,
     SEARCH_DEALS,

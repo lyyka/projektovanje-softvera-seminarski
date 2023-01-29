@@ -1,19 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package domain;
 
 import enums.DealStatus;
-import java.io.Serializable;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-/**
- *
- * @author kredium
- */
-public class Deal implements Serializable {
+public class Deal implements GenericEntity {
     private Long id;
     private Client client;
     private Broker broker;
@@ -162,6 +158,98 @@ public class Deal implements Serializable {
         }
         return Objects.equals(this.updatedAt, other.updatedAt);
     }
-    
-    
+
+    @Override
+    public String getTableName() {
+        return "deals";
+    }
+
+    @Override
+    public String getColumnNamesForInsert() {
+        return "client_id,broker_id,product_id,deal_value,deal_status,description";
+    }
+
+    @Override
+    public void bindInsertValues(PreparedStatement ps) {
+        try {
+            ps.setLong(1, client.getId());
+            ps.setLong(2, broker.getId());
+            ps.setLong(3, product.getId());
+            ps.setDouble(4, dealValue);
+            ps.setString(5, dealStatus.toString());
+            ps.setString(6, description);
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public String getUpdateValues() {
+        return "client_id,broker_id,product_id,deal_value,deal_status,description";
+    }
+
+    @Override
+    public void bindUpdateValues(PreparedStatement ps) {
+        try {
+            ps.setLong(1, client.getId());
+            ps.setLong(2, broker.getId());
+            ps.setLong(3, product.getId());
+            ps.setDouble(4, dealValue);
+            ps.setString(5, dealStatus.toString());
+            ps.setString(6, description);
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public String getColumnNamesForSelect() {
+        return "id,client_id,broker_id,product_id,deal_value,deal_status,description,created_at,updated_at";
+    }
+
+    @Override
+    public String getWhereClauseForSelect() {
+        if(this.getId() != null) {
+            return "id = ?";
+        }
+        
+        return "";
+    }
+
+    @Override
+    public void bindWhereClauseValuesForSelect(PreparedStatement ps) {
+        try {
+            if(this.getId() != null) {
+                ps.setLong(1, this.getId());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Deal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public GenericEntity newFromResultSet(ResultSet rs) {
+        Deal deal = new Deal();
+        try {
+            Client c = new Client();
+            c.setId(rs.getLong("client_id"));
+            Broker b = new Broker();
+            b.setId(rs.getLong("broker_id"));
+            Product p = new Product();
+            p.setId(rs.getLong("product_id"));
+            
+            deal.setId(rs.getLong("id"));
+            deal.setClient(c);
+            deal.setBroker(b);
+            deal.setProduct(p);
+            deal.setDealValue(rs.getDouble("deal_value"));
+            deal.setDealStatus(DealStatus.valueOf(rs.getString("deal_status")));
+            deal.setDescription(rs.getString("description"));
+            deal.setCreatedAt(rs.getDate("created_at"));
+            deal.setUpdatedAt(rs.getDate("updated_at"));
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return deal;
+    }
 }

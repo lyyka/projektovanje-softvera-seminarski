@@ -6,7 +6,6 @@ package forms.clients;
 
 import controllers.Communication;
 import domain.Client;
-import java.awt.HeadlessException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;

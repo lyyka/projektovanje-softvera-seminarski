@@ -197,4 +197,16 @@ public class Communication {
             throw response.getException();
         }
     }
+
+    public Deal loadDeal(Deal deal) throws Exception {
+        Request request = new Request(Operation.LOAD_DEAL, deal);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        
+        if(response.getException()!=null){
+            throw response.getException();
+        }
+
+        return (Deal) response.getResult();
+    }
 }

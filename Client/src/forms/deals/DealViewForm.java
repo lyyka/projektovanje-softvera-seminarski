@@ -5,6 +5,7 @@ import domain.Deal;
 import forms.tableModels.DealTableModel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class DealViewForm extends javax.swing.JDialog {
 
@@ -16,7 +17,10 @@ public class DealViewForm extends javax.swing.JDialog {
     public DealViewForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
         this.parent = parent;
+        
+        initTable();
     }
     
     private void initTable()
@@ -121,9 +125,21 @@ public class DealViewForm extends javax.swing.JDialog {
         if(i >= 0) {
             DealTableModel dtm = (DealTableModel) this.jTable1.getModel();
             Deal d = dtm.getDealAt(i);
-            DealCreateForm dcf = new DealCreateForm(this.parent, true);
-            dcf.setDeal(d);
-            dcf.setVisible(true);
+            
+            try {
+                d = Communication.getInstance().loadDeal(d);
+                
+                System.out.println(d.getId());
+                
+                JOptionPane.showMessageDialog(this, "Sistem je uspesno ucitao prodajnu sansu za klijenta");
+                
+                DealCreateForm dcf = new DealCreateForm(this.parent, true);
+                dcf.setDeal(d);
+                dcf.setVisible(true);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita prodajnu sansu za klijenta");
+                Logger.getLogger(DealViewForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
