@@ -23,7 +23,7 @@ public class SaveDealOperation extends AbstractOperation {
             
             // If the product was created successfully,
             // create all of its features too
-            if(deal.getProduct().getId() == null) {
+            if(deal.getProduct().getId() != null) {
                 for(ProductFeature pf : deal.getProduct().getProductFeatures()) {
                     this.repository.add(pf);
                 }
