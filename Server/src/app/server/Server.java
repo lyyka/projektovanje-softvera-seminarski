@@ -31,10 +31,20 @@ public class Server extends Thread {
             System.out.println(ex.getMessage());
         }
     }
+    
+    public void refreshLoggedInList()
+    {
+        this.srvFrm.refreshList();
+    }
+    
+    public void removePcr(ProcessClientsRequests pcr)
+    {
+        this.pcrs.remove(pcr);
+    }
 
     private void handleClient(Socket socket) throws Exception {
         ProcessClientsRequests pcr = new ProcessClientsRequests(socket);
-        pcr.setSrvFrm(this.srvFrm);
+        pcr.setServer(this);
         pcr.start();
         this.pcrs.add(pcr);
     }
@@ -43,7 +53,6 @@ public class Server extends Thread {
     {
         List<Broker> res = new ArrayList<>();
         for(ProcessClientsRequests pcr : this.pcrs) {
-            System.out.println(pcr.getLoggedInBroker());
             if(pcr.getLoggedInBroker() != null) {
                 res.add(pcr.getLoggedInBroker());
             }

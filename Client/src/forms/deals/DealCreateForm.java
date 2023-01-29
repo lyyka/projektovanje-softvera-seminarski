@@ -13,6 +13,7 @@ import domain.ProductFeature;
 import enums.DealStatus;
 import forms.tableModels.ProductFeatureTableModel;
 import forms.tableModels.ProductTableModel;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -354,7 +355,11 @@ public class DealCreateForm extends javax.swing.JDialog {
             product.setTitle(npTitle.getText());
             
             ProductFeatureTableModel pftm = (ProductFeatureTableModel) this.pfsTable.getModel();
-            product.setProductFeatures(pftm.getFeatures());
+            List<ProductFeature> features = pftm.getFeatures();
+            for(ProductFeature pf : features) {
+                pf.setProduct(product);
+            }
+            product.setProductFeatures(features);
         }
         
         Double value = Double.valueOf(dealValue.getText());

@@ -97,18 +97,20 @@ public class ProductFeature implements GenericEntity {
 
     @Override
     public String getTableName() {
-        return "products";
+        return "product_features";
     }
     
     @Override
     public String getColumnNamesForInsert() {
-        return "title";
+        return "product_id,title,val";
     }
 
     @Override
     public void bindInsertValues(PreparedStatement ps) {
         try {
-            ps.setString(1, title);
+            ps.setLong(1, this.product.getId());
+            ps.setString(2, title);
+            ps.setString(3, val);
         } catch (SQLException ex) {
             Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -116,13 +118,14 @@ public class ProductFeature implements GenericEntity {
 
     @Override
     public String getUpdateValues() {
-        return "title";
+        return "title,val";
     }
 
     @Override
     public void bindUpdateValues(PreparedStatement ps) {
         try {
             ps.setString(1, title);
+            ps.setString(2, val);
         } catch (SQLException ex) {
             Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -130,7 +133,7 @@ public class ProductFeature implements GenericEntity {
     
     @Override
     public String getColumnNamesForSelect() {
-        return "id,title";
+        return "id,title,val";
     }
 
     @Override
@@ -174,13 +177,14 @@ public class ProductFeature implements GenericEntity {
 
     @Override
     public GenericEntity newFromResultSet(ResultSet rs) {
-        Product product = new Product();
+        ProductFeature pf = new ProductFeature();
         try {
-            product.setId(rs.getLong("id"));
-            product.setTitle(rs.getString("title"));
+            pf.setId(rs.getLong("id"));
+            pf.setTitle(rs.getString("title"));
+            pf.setVal(rs.getString("val"));
         } catch (SQLException ex) {
             Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return product;
+        return pf;
     }
 }

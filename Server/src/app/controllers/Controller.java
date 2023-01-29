@@ -41,214 +41,122 @@ public class Controller {
         return instance;
     }
     
-    public Broker login(Broker params)
+    public Broker login(Broker params) throws Exception
     {
         Broker b = null;
         
-        try {
-            for(Broker br : (new GenericRepository<Broker>()).getAll(new Broker())) {
-                if(br.getEmail().equals(params.getEmail()) && br.getPassword().equals(params.getPassword())) {
-                    b = br;
-                    break;
-                }
+        for(Broker br : (new GenericRepository<Broker>()).getAll(new Broker())) {
+            if(br.getEmail().equals(params.getEmail()) && br.getPassword().equals(params.getPassword())) {
+                b = br;
+                break;
             }
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return b;
     }
     
-    public Client loadClient(Client c)
+    public Client loadClient(Client c) throws Exception
     {
-        try {
-            LoadClientOperation op = new LoadClientOperation();
-            op.execute(c);
-            return op.getResult();
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return c;
+        LoadClientOperation op = new LoadClientOperation();
+        op.execute(c);
+        return op.getResult();
     }
     
-    public void createClient(Client c)
+    public void createClient(Client c) throws Exception
     {
-        try {
-            (new CreateClientOperation()).execute(c);
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        (new CreateClientOperation()).execute(c);
     }
     
-    public void updateClient(Client c)
+    public void updateClient(Client c) throws Exception
     {
-        try {
-            (new UpdateClientOperation()).execute(c);
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        (new UpdateClientOperation()).execute(c);
     }
     
-    public void deleteClient(Client c)
+    public void deleteClient(Client c) throws Exception
     {
-        try {
-            (new DeleteClientOperation()).execute(c);
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        (new DeleteClientOperation()).execute(c);
     }
     
-    public List<Client> loadAllClients()
+    public List<Client> loadAllClients() throws Exception
     {
-        try {
-            LoadAllClientsOperation o = new LoadAllClientsOperation();
-            o.execute(new Client());
-            return o.getResult();
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return new ArrayList<>();
+        LoadAllClientsOperation o = new LoadAllClientsOperation();
+        o.execute(new Client());
+        return o.getResult();
     }
     
-    public List<Client> searchClients(Client c)
+    public List<Client> searchClients(Client c) throws Exception
     {
-        try {
-            SearchClientsOperation o = new SearchClientsOperation();
-            o.execute(c);
-            return o.getResult();
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return new ArrayList<>();
+        SearchClientsOperation o = new SearchClientsOperation();
+        o.execute(c);
+        return o.getResult();
     }
     
-    public Broker loadBroker(Broker b)
+    public Broker loadBroker(Broker b) throws Exception
     {
-        try {
-            LoadBrokerOperation op = new LoadBrokerOperation();
-            op.execute(b);
-            return op.getResult();
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return b;
+        LoadBrokerOperation op = new LoadBrokerOperation();
+        op.execute(b);
+        return op.getResult();
     }
     
-    public void createBroker(Broker b)
+    public void createBroker(Broker b) throws Exception
     {
-        try {
-            (new CreateBrokerOperation()).execute(b);
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        (new CreateBrokerOperation()).execute(b);
     }
     
-    public void updateBroker(Broker b)
+    public void updateBroker(Broker b) throws Exception
     {
-        try {
-            (new UpdateBrokerOperation()).execute(b);
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        (new UpdateBrokerOperation()).execute(b);
     }
     
-    public void deleteBroker(Broker b)
+    public void deleteBroker(Broker b) throws Exception
     {
-        try {
-            (new DeleteBrokerOperation()).execute(b);
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        (new DeleteBrokerOperation()).execute(b);
     }
     
-    public List<Broker> loadAllBrokers()
+    public List<Broker> loadAllBrokers() throws Exception
     {
-        try {
-            LoadAllBrokersOperation o = new LoadAllBrokersOperation();
-            o.execute(new Broker());
-            return o.getResult();
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return new ArrayList<>();
+        LoadAllBrokersOperation o = new LoadAllBrokersOperation();
+        o.execute(new Broker());
+        return o.getResult();
     }
     
-    public List<Broker> searchBrokers(Broker b)
+    public List<Broker> searchBrokers(Broker b) throws Exception
     {
-        try {
-            SearchBrokersOperation o = new SearchBrokersOperation();
-            o.execute(b);
-            return o.getResult();
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return new ArrayList<>();
+        SearchBrokersOperation o = new SearchBrokersOperation();
+        o.execute(b);
+        return o.getResult();
     }
     
-    public List<Product> loadAllProducts()
+    public List<Product> loadAllProducts() throws Exception
     {
-        try {
-            LoadAllProductsOperation o = new LoadAllProductsOperation();
-            o.execute(new Product());
-            return o.getResult();
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return new ArrayList<>();
+        LoadAllProductsOperation o = new LoadAllProductsOperation();
+        o.execute(new Product());
+        return o.getResult();
     }
     
-    public Deal loadDeal(Deal deal)
+    public Deal loadDeal(Deal deal) throws Exception
     {
-        try {
-            LoadDealOperation op = new LoadDealOperation();
-            op.execute(deal);
-            return op.getResult();
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return deal;
+        LoadDealOperation op = new LoadDealOperation();
+        op.execute(deal);
+        return op.getResult();
     }
     
-    public void saveDeal(Deal d)
+    public void saveDeal(Deal d) throws Exception
     {
-        try {
-            (new SaveDealOperation()).execute(d);
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        (new SaveDealOperation()).execute(d);
     }
     
-    public List<Deal> searchDeals(Deal d)
+    public List<Deal> searchDeals(Deal d) throws Exception
     {
-        try {
-            SearchDealsOperation o = new SearchDealsOperation();
-            o.execute(d);
-            return o.getResult();
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return new ArrayList<>();
+        SearchDealsOperation o = new SearchDealsOperation();
+        o.execute(d);
+        return o.getResult();
     }
     
-    public List<Deal> loadAllDeals()
+    public List<Deal> loadAllDeals() throws Exception
     {
-        try {
-            LoadAllDealsOperation o = new LoadAllDealsOperation();
-            o.execute(new Deal());
-            return o.getResult();
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return new ArrayList<>();
+        LoadAllDealsOperation o = new LoadAllDealsOperation();
+        o.execute(new Deal());
+        return o.getResult();
     }
 }

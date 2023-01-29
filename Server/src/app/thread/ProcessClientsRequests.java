@@ -6,6 +6,7 @@
 package app.thread;
 
 import app.controllers.Controller;
+import app.server.Server;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,23 +17,25 @@ import communication.Sender;
 import domain.Client;
 import domain.Broker;
 import domain.Deal;
-import main.SrvFrm;
+import java.io.EOFException;
+import java.io.IOException;
+import java.net.SocketException;
 
 public class ProcessClientsRequests extends Thread {
     Broker loggedInBroker;
     Socket socket;
     Sender sender;
     Receiver receiver;
-    SrvFrm srvFrm;
+    Server server;
 
     public ProcessClientsRequests(Socket socket) {
         this.socket = socket;        
         sender = new Sender(socket);
         receiver = new Receiver(socket);
     }
-
-    public void setSrvFrm(SrvFrm srvFrm) {
-        this.srvFrm = srvFrm;
+    
+    public void setServer(Server server) {
+        this.server = server;
     }
     
     public Broker getLoggedInBroker() {
@@ -52,7 +55,7 @@ public class ProcessClientsRequests extends Thread {
                             Broker b = Controller.getInstance().login(params);
                             response.setResult(b);
                             this.loggedInBroker = b;
-                            this.srvFrm.refreshList();
+                            this.server.refreshLoggedInList();
                             break;
                         case GET_ALL_PRODUCTS:
                             response.setResult(Controller.getInstance().loadAllProducts());
@@ -129,7 +132,13 @@ public class ProcessClientsRequests extends Thread {
                 }
                 sender.send(response);
             } catch (Exception ex) {
-                Logger.getLogger(ProcessClientsRequests.class.getName()).log(Level.SEVERE, null, ex);
+                this.loggedInBroker = null;
+                this.server.refreshLoggedInList();
+                this.server.removePcr(this);
+                try {
+                    this.socket.close();
+                } catch (IOException exc) { }
+                break;
             }
         }
     }

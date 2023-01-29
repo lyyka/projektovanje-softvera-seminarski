@@ -230,7 +230,9 @@ public class Deal implements GenericEntity {
             if(this.getId() != null) {
                 ps.setLong(1, this.getId());
             } else {
-                ps.setString(1, this.getDescription());
+                if(description != null) {
+                    ps.setString(1, this.getDescription());
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(Deal.class.getName()).log(Level.SEVERE, null, ex);
