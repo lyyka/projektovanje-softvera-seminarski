@@ -115,18 +115,6 @@ public class Communication {
         }
     }
     
-    public List<Deal> getAllDeals() throws Exception
-    {
-        Request request = new Request(Operation.GET_ALL_DEALS, null);
-        sender.send(request);
-        Response response=(Response)receiver.receive();
-        if(response.getException()==null){
-            return (List<Deal>) response.getResult();
-        }else{
-            throw response.getException();
-        }
-    }
-    
     public List<Client> getAllClients() throws Exception
     {
         Request request = new Request(Operation.GET_ALL_CLIENTS, null);
@@ -182,6 +170,30 @@ public class Communication {
         Response response=(Response)receiver.receive();
         if(response.getException()==null){
             return (List<Product>) response.getResult();
+        }else{
+            throw response.getException();
+        }
+    }
+    
+    public List<Deal> getAllDeals() throws Exception
+    {
+        Request request = new Request(Operation.GET_ALL_DEALS, null);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        if(response.getException()==null){
+            return (List<Deal>) response.getResult();
+        }else{
+            throw response.getException();
+        }
+    }
+    
+    public List<Deal> getAllDeals(Deal param) throws Exception
+    {
+        Request request = new Request(Operation.SEARCH_DEALS, param);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        if(response.getException()==null){
+            return (List<Deal>) response.getResult();
         }else{
             throw response.getException();
         }

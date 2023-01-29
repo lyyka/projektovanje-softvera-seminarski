@@ -4,7 +4,9 @@ import enums.DealStatus;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -213,7 +215,13 @@ public class Deal implements GenericEntity {
             return "id = ?";
         }
         
-        return "";
+        List<String> wheres = new ArrayList<>();
+        
+        if(description != null) {
+            wheres.add("description like ?");
+        }
+        
+        return String.join(" or ", wheres);
     }
 
     @Override
@@ -221,6 +229,8 @@ public class Deal implements GenericEntity {
         try {
             if(this.getId() != null) {
                 ps.setLong(1, this.getId());
+            } else {
+                ps.setString(1, this.getDescription());
             }
         } catch (SQLException ex) {
             Logger.getLogger(Deal.class.getName()).log(Level.SEVERE, null, ex);
