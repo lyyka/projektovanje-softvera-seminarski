@@ -15,7 +15,6 @@ import communication.Response;
 import communication.Sender;
 import domain.Client;
 import domain.Broker;
-import domain.Deal;
 import main.SrvFrm;
 
 public class ProcessClientsRequests extends Thread {
@@ -60,6 +59,10 @@ public class ProcessClientsRequests extends Thread {
                         case GET_ALL_CLIENTS:
                             response.setResult(Controller.getInstance().loadAllClients());
                             break;
+                        case LOAD_CLIENT:
+                            Client clientToLoad = (Client) request.getArgument();
+                            response.setResult(Controller.getInstance().loadClient(clientToLoad));
+                            break;
                         case SEARCH_CLIENTS:
                             Client searchParamClient = (Client) request.getArgument();
                             response.setResult(Controller.getInstance().searchClients(searchParamClient));
@@ -80,6 +83,10 @@ public class ProcessClientsRequests extends Thread {
                             break;
                         case GET_ALL_BROKERS:
                             response.setResult(Controller.getInstance().loadAllBrokers());
+                            break;
+                        case LOAD_BROKER:
+                            Broker brokerToLoad = (Broker) request.getArgument();
+                            response.setResult(Controller.getInstance().loadBroker(brokerToLoad));
                             break;
                         case SEARCH_BROKERS:
                             Broker searchParamBroker = (Broker) request.getArgument();

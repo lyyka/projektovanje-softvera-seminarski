@@ -45,6 +45,19 @@ public class Communication {
         }
     }
     
+    public Client loadClient(Client client) throws Exception
+    {
+        Request request = new Request(Operation.LOAD_CLIENT, client);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        
+        if(response.getException()!=null){
+            throw response.getException();
+        }
+
+        return (Client) response.getResult();
+    }
+    
     public void saveClient(Client client) throws Exception
     {
         Request request = new Request(Operation.SAVE_CLIENT, client);
@@ -54,6 +67,19 @@ public class Communication {
         if(response.getException()!=null){
             throw response.getException();
         }
+    }
+    
+    public Broker loadBroker(Broker broker) throws Exception
+    {
+        Request request = new Request(Operation.LOAD_BROKER, broker);
+        sender.send(request);
+        Response response=(Response)receiver.receive();
+        
+        if(response.getException()!=null){
+            throw response.getException();
+        }
+
+        return (Broker) response.getResult();
     }
     
     public void saveBroker(Broker broker) throws Exception

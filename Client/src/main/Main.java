@@ -1,6 +1,6 @@
 package main;
 
-import forms.LoginForm;
+import forms.auth.LoginForm;
 
 public class Main {
     public static void main(String[] args) {

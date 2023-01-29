@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package forms;
+package forms.deals;
 
 import controllers.Communication;
 import domain.Client;
@@ -11,6 +11,8 @@ import domain.Deal;
 import domain.Product;
 import domain.ProductFeature;
 import enums.DealStatus;
+import forms.tableModels.ProductFeatureTableModel;
+import forms.tableModels.ProductTableModel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;

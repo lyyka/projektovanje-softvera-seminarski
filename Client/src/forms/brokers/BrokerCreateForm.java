@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package forms;
+package forms.brokers;
 
 import controllers.Communication;
 import domain.Broker;
@@ -24,18 +24,12 @@ public class BrokerCreateForm extends javax.swing.JDialog {
     }
 
     public void setBroker(Broker c) {
-        try { 
-            this.broker = c;
-            this.firstName.setText(c.getFirstName());
-            this.lastName.setText(c.getLastName());
-            this.email.setText(c.getEmail());
-            this.phone.setText(c.getPhone());
-            this.pwdI.setText(c.getPassword());
-            
-            JOptionPane.showMessageDialog(this, "Sistem je uspesno ucitao prodavca");
-        } catch(Exception e) {
-            JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita prodavca");
-        }
+        this.broker = c;
+        this.firstName.setText(c.getFirstName());
+        this.lastName.setText(c.getLastName());
+        this.email.setText(c.getEmail());
+        this.phone.setText(c.getPhone());
+        this.pwdI.setText(c.getPassword());
     }
 
     /**

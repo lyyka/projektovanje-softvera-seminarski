@@ -1,7 +1,8 @@
-package forms;
+package forms.deals;
 
 import controllers.Communication;
 import domain.Deal;
+import forms.tableModels.DealTableModel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

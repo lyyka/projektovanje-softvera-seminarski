@@ -2,10 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package forms;
+package forms.auth;
 
 import controllers.Communication;
 import domain.Broker;
+import forms.main.MainForm;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

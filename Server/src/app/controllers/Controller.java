@@ -11,11 +11,13 @@ import java.util.logging.Logger;
 import operations.brokers.CreateBrokerOperation;
 import operations.brokers.DeleteBrokerOperation;
 import operations.brokers.LoadAllBrokersOperation;
+import operations.brokers.LoadBrokerOperation;
 import operations.brokers.SearchBrokersOperation;
 import operations.brokers.UpdateBrokerOperation;
 import operations.clients.CreateClientOperation;
 import operations.clients.DeleteClientOperation;
 import operations.clients.LoadAllClientsOperation;
+import operations.clients.LoadClientOperation;
 import operations.clients.SearchClientsOperation;
 import operations.clients.UpdateClientOperation;
 import operations.products.LoadAllProductsOperation;
@@ -50,6 +52,19 @@ public class Controller {
         }
         
         return b;
+    }
+    
+    public Client loadClient(Client c)
+    {
+        try {
+            LoadClientOperation op = new LoadClientOperation();
+            op.execute(c);
+            return op.getResult();
+        } catch (Exception ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return c;
     }
     
     public void createClient(Client c)
@@ -103,6 +118,19 @@ public class Controller {
         }
         
         return new ArrayList<>();
+    }
+    
+    public Broker loadBroker(Broker b)
+    {
+        try {
+            LoadBrokerOperation op = new LoadBrokerOperation();
+            op.execute(b);
+            return op.getResult();
+        } catch (Exception ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return b;
     }
     
     public void createBroker(Broker b)

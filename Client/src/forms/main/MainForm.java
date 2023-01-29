@@ -2,7 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package forms;
+package forms.main;
+
+import forms.brokers.BrokerCreateForm;
+import forms.brokers.BrokerViewForm;
+import forms.clients.ClientCreateForm;
+import forms.clients.ClientViewForm;
+import forms.deals.DealViewForm;
+import forms.deals.DealCreateForm;
 
 /**
  *

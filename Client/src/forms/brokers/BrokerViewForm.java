@@ -2,27 +2,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package forms;
+package forms.brokers;
 
+import forms.tableModels.BrokerTableModel;
 import controllers.Communication;
-import domain.Client;
+import domain.Broker;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author kredium
- */
-public class ClientViewForm extends javax.swing.JDialog {
+public class BrokerViewForm extends javax.swing.JDialog {
 
-    private ClientTableModel ctm;
+    private BrokerTableModel btm;
     private java.awt.Frame parent;
     
     /**
      * Creates new form ClientViewForm
      */
-    public ClientViewForm(java.awt.Frame parent, boolean modal) {
+    public BrokerViewForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         this.parent = parent;
         initComponents();
@@ -33,22 +30,22 @@ public class ClientViewForm extends javax.swing.JDialog {
     
     private void updateInterface()
     {
-        boolean isEmpty = this.ctm.count() == 0;
+        boolean isEmpty = this.btm.count() == 0;
         this.deleteBtn.setEnabled(!isEmpty);
         this.editBtn.setEnabled(!isEmpty);
     }
     
     private void initTable() {
         try {
-            this.ctm = new ClientTableModel(
-                    Communication.getInstance().getAllClients()
+            this.btm = new BrokerTableModel(
+                    Communication.getInstance().getAllBrokers()
             );
         
-            this.jTable1.setModel(this.ctm);
+            this.jTable1.setModel(this.btm);
             
             this.updateInterface();
         } catch (Exception ex) {
-            Logger.getLogger(ClientViewForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BrokerViewForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -103,7 +100,7 @@ public class ClientViewForm extends javax.swing.JDialog {
             }
         });
 
-        jLabel1.setText("SVI KLIJENTI");
+        jLabel1.setText("SVI PRODAVCI");
 
         searchField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -127,7 +124,7 @@ public class ClientViewForm extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(editBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(deleteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+                            .addComponent(deleteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,7 +138,7 @@ public class ClientViewForm extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -154,7 +151,7 @@ public class ClientViewForm extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton3))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24))
+                .addGap(17, 17, 17))
         );
 
         pack();
@@ -164,10 +161,20 @@ public class ClientViewForm extends javax.swing.JDialog {
         int i = this.jTable1.getSelectedRow();
         
         if(i >= 0) {
-            Client c = this.ctm.getClientAt(i);
-            ClientCreateForm ccf = new ClientCreateForm(this.parent, false);
-            ccf.setClient(c);
-            ccf.setVisible(true);
+            Broker b = this.btm.getBrokerAt(i);
+            
+            try {
+                b = Communication.getInstance().loadBroker(b);
+                
+                JOptionPane.showMessageDialog(this, "Sistem je uspesno ucitao prodavca");
+            
+                BrokerCreateForm bcf = new BrokerCreateForm(this.parent, false);
+                bcf.setBroker(b);
+                bcf.setVisible(true);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita prodavca");
+                Logger.getLogger(BrokerViewForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_editBtnActionPerformed
 
@@ -179,46 +186,58 @@ public class ClientViewForm extends javax.swing.JDialog {
         int i = this.jTable1.getSelectedRow();
         
         if(i >= 0) {
-            Client c = this.ctm.getClientAt(i);
+            Broker broker = this.btm.getBrokerAt(i);
+            
             try {
-                Communication.getInstance().deleteClient(c);
-                this.ctm.removeClientAt(i);
-                this.jTable1.setModel(this.ctm);
-                this.updateInterface();
-                JOptionPane.showMessageDialog(this, "Sistem je obrisao klijenta");
-            } catch (Exception ex) {
-                Logger.getLogger(ClientViewForm.class.getName()).log(Level.SEVERE, null, ex);
+                broker = Communication.getInstance().loadBroker(broker);
                 
-                JOptionPane.showMessageDialog(this, "Sistem ne moze da obrise klijenta");
+                JOptionPane.showMessageDialog(this, "Sistem je uspesno ucitao prodavca");
+            } catch(Exception ex) {
+                Logger.getLogger(BrokerViewForm.class.getName()).log(Level.SEVERE, null, ex);
+                
+                JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita prodavca");
+            }
+            
+            try {
+                Communication.getInstance().deleteBroker(broker);
+                
+                JOptionPane.showMessageDialog(this, "Sistem je uspesno izbrisao prodavca");
+                
+                this.btm.removeClientAt(i);
+                this.jTable1.setModel(this.btm);
+                this.updateInterface();
+            } catch (Exception ex) {
+                Logger.getLogger(BrokerViewForm.class.getName()).log(Level.SEVERE, null, ex);
+                
+                JOptionPane.showMessageDialog(this, "Sistem ne moze da izbrise prodavca");
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
 
     private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
+        Broker param = new Broker();
+        param.setFirstName(searchField.getText());
+        param.setLastName(searchField.getText());
+        param.setEmail(searchField.getText());
+        param.setPhone(searchField.getText());
+        
         try {
-            Client param = new Client();
-            param.setFirstName(searchField.getText());
-            param.setLastName(searchField.getText());
-            param.setEmail(searchField.getText());
-            param.setPhone(searchField.getText());
-            param.setAddress(searchField.getText());
-            
-            this.ctm = new ClientTableModel(
-                    Communication.getInstance().getAllClients(param)
+            this.btm = new BrokerTableModel(
+                    Communication.getInstance().getAllBrokers(param)
             );
-
-            this.jTable1.setModel(this.ctm);
-
+        
+            this.jTable1.setModel(this.btm);
+            
             this.updateInterface();
             
-            if(this.ctm.count() == 0) {
-                JOptionPane.showMessageDialog(this, "Sistem nije pronasao ni jednog klijenta po zadatoj vrednosti");
+            if(this.btm.count() == 0) {
+                JOptionPane.showMessageDialog(this, "Sistem nije pronasao ni jednog prodavca po zadatoj vrednosti");
             } else {
-                JOptionPane.showMessageDialog(this, "Sistem je pronasao klijente po zadatoj vrednosti");
+                JOptionPane.showMessageDialog(this, "Sistem je pronasao prodavce po zadatoj vrednosti");
             }
-         } catch (Exception ex) {
-             Logger.getLogger(ClientViewForm.class.getName()).log(Level.SEVERE, null, ex);
-         }
+        } catch (Exception ex) {
+            Logger.getLogger(BrokerViewForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_searchFieldActionPerformed
 
 

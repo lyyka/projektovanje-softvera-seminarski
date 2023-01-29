@@ -207,18 +207,22 @@ public class Broker implements GenericEntity {
     public String getWhereClauseForSelect() {
         List<String> wheres = new ArrayList<>();
         
+        if(this.getId() != null) {
+            return "id = " + this.getId();
+        }
+        
         if(firstName != null) {
             wheres.add("first_name like '%" + firstName + "'%");
         }
-        
+
         if(lastName != null) {
             wheres.add("last_name like '%" + lastName + "'%");
         }
-        
+
         if(email != null) {
             wheres.add("email like '%" + email + "'%");
         }
-        
+
         if(phone != null) {
             wheres.add("phone like '%" + phone + "'%");
         }

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package forms;
+package forms.clients;
 
 import controllers.Communication;
 import domain.Client;
@@ -29,18 +29,12 @@ public class ClientCreateForm extends javax.swing.JDialog {
     }
 
     public void setClient(Client c) {
-        try {
-            this.c = c;
-            this.firstName.setText(c.getFirstName());
-            this.lastName.setText(c.getLastName());
-            this.email.setText(c.getEmail());
-            this.phone.setText(c.getPhone());
-            this.addr.setText(c.getAddress());
-            
-            JOptionPane.showMessageDialog(this, "Sistem je uspesno ucitao klijenta");
-        } catch(HeadlessException e) {
-            JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita klijenta");
-        }
+        this.c = c;
+        this.firstName.setText(c.getFirstName());
+        this.lastName.setText(c.getLastName());
+        this.email.setText(c.getEmail());
+        this.phone.setText(c.getPhone());
+        this.addr.setText(c.getAddress());
     }
 
     /**

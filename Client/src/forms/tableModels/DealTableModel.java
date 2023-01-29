@@ -1,4 +1,4 @@
-package forms;
+package forms.tableModels;
 
 import domain.Deal;
 import java.util.List;

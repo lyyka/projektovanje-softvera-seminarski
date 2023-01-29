@@ -11,6 +11,7 @@ public class SrvFrm extends javax.swing.JFrame {
      */
     public SrvFrm() {
         initComponents();
+        setLocationRelativeTo(null);
     }
     
     public void refreshList()
