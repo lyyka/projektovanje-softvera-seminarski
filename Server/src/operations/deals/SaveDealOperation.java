@@ -30,8 +30,6 @@ public class SaveDealOperation extends AbstractOperation {
             }
         }
         
-        System.out.println("Save deal with " + deal.getId());
-        
         if(deal.getId() != null) {
             this.repository.edit(deal);
         } else {
