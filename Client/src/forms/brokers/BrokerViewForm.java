@@ -45,6 +45,7 @@ public class BrokerViewForm extends javax.swing.JDialog {
             
             this.updateInterface();
         } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita sve prodavce");
             Logger.getLogger(BrokerViewForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -193,9 +194,8 @@ public class BrokerViewForm extends javax.swing.JDialog {
                 
                 JOptionPane.showMessageDialog(this, "Sistem je uspesno ucitao prodavca");
             } catch(Exception ex) {
-                Logger.getLogger(BrokerViewForm.class.getName()).log(Level.SEVERE, null, ex);
-                
                 JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita prodavca");
+                Logger.getLogger(BrokerViewForm.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             try {
@@ -207,9 +207,8 @@ public class BrokerViewForm extends javax.swing.JDialog {
                 this.jTable1.setModel(this.btm);
                 this.updateInterface();
             } catch (Exception ex) {
-                Logger.getLogger(BrokerViewForm.class.getName()).log(Level.SEVERE, null, ex);
-                
                 JOptionPane.showMessageDialog(this, "Sistem ne moze da izbrise prodavca");
+                Logger.getLogger(BrokerViewForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
@@ -236,6 +235,7 @@ public class BrokerViewForm extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "Sistem je pronasao prodavce po zadatoj vrednosti");
             }
         } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Sistem nije pronasao ni jednog prodavca po zadatoj vrednosti");
             Logger.getLogger(BrokerViewForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_searchFieldActionPerformed

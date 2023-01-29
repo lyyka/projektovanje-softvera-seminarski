@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package forms.clients;
 
 import controllers.Communication;
@@ -11,10 +7,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author kredium
- */
 public class ClientViewForm extends javax.swing.JDialog {
 
     private ClientTableModel ctm;
@@ -49,7 +41,7 @@ public class ClientViewForm extends javax.swing.JDialog {
             
             this.updateInterface();
         } catch (Exception ex) {
-            Logger.getLogger(ClientViewForm.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita sve klijente");
         }
     }
 
@@ -176,9 +168,8 @@ public class ClientViewForm extends javax.swing.JDialog {
                 ccf.setClient(c);
                 ccf.setVisible(true);
             } catch (Exception ex) {
-                Logger.getLogger(ClientViewForm.class.getName()).log(Level.SEVERE, null, ex);
-                
                 JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita klijenta");
+                Logger.getLogger(ClientViewForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_editBtnActionPerformed
@@ -199,9 +190,8 @@ public class ClientViewForm extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "Sistem je uspesno ucitao klijenta");
                 
             } catch (Exception ex) {
-                Logger.getLogger(ClientViewForm.class.getName()).log(Level.SEVERE, null, ex);
-                
                 JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita klijenta");
+                Logger.getLogger(ClientViewForm.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             try {
@@ -211,9 +201,8 @@ public class ClientViewForm extends javax.swing.JDialog {
                 this.updateInterface();
                 JOptionPane.showMessageDialog(this, "Sistem je obrisao klijenta");
             } catch (Exception ex) {
-                Logger.getLogger(ClientViewForm.class.getName()).log(Level.SEVERE, null, ex);
-                
                 JOptionPane.showMessageDialog(this, "Sistem ne moze da obrise klijenta");
+                Logger.getLogger(ClientViewForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
@@ -241,6 +230,7 @@ public class ClientViewForm extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "Sistem je pronasao klijente po zadatoj vrednosti");
             }
          } catch (Exception ex) {
+             JOptionPane.showMessageDialog(this, "Sistem nije pronasao ni jednog klijenta po zadatoj vrednosti");
              Logger.getLogger(ClientViewForm.class.getName()).log(Level.SEVERE, null, ex);
          }
     }//GEN-LAST:event_searchFieldActionPerformed

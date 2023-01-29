@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package forms.clients;
 
 import controllers.Communication;
@@ -10,10 +6,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author kredium
- */
 public class ClientCreateForm extends javax.swing.JDialog {
 
     private Client c;
@@ -153,9 +145,8 @@ public class ClientCreateForm extends javax.swing.JDialog {
             
             JOptionPane.showMessageDialog(this, "Sistem je zapamtio klijenta");
         } catch (Exception ex) {
-            Logger.getLogger(ClientCreateForm.class.getName()).log(Level.SEVERE, null, ex);
-            
             JOptionPane.showMessageDialog(this, "Sistem ne moze da zapamti klijenta");
+            Logger.getLogger(ClientCreateForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package forms.auth;
 
 import controllers.Communication;
@@ -9,11 +5,8 @@ import domain.Broker;
 import forms.main.MainForm;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author kredium
- */
 public class LoginForm extends javax.swing.JFrame {
 
     /**
@@ -120,6 +113,7 @@ public class LoginForm extends javax.swing.JFrame {
                     this.dispose();
                 }
             } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Sistem ne moze da odradi autentikaciju");
                 Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

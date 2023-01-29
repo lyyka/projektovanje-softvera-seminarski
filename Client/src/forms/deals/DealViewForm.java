@@ -3,9 +3,9 @@ package forms.deals;
 import controllers.Communication;
 import domain.Deal;
 import forms.tableModels.DealTableModel;
+import javax.swing.JOptionPane;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 public class DealViewForm extends javax.swing.JDialog {
 
@@ -32,6 +32,7 @@ public class DealViewForm extends javax.swing.JDialog {
                     )
             );
         } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Sistem ne moze da ucita sve prodajne sanse");
             Logger.getLogger(DealViewForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -178,6 +179,7 @@ public class DealViewForm extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "Sistem je pronasao prodajen sanse za klijenta po zadatoj vrednosti");
             }
          } catch (Exception ex) {
+             JOptionPane.showMessageDialog(this, "Sistem nije pronasao ni jednu prodajnu sansu za klijenta po zadatoj vrednosti");
              Logger.getLogger(DealViewForm.class.getName()).log(Level.SEVERE, null, ex);
          }
     }//GEN-LAST:event_searchFieldActionPerformed

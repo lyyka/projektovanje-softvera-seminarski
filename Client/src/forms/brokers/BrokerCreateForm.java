@@ -152,9 +152,8 @@ public class BrokerCreateForm extends javax.swing.JDialog {
             
             JOptionPane.showMessageDialog(this, "Sistem je zapamtio prodavca");
         } catch (Exception ex) {
-            Logger.getLogger(BrokerCreateForm.class.getName()).log(Level.SEVERE, null, ex);
-            
             JOptionPane.showMessageDialog(this, "Sistem ne moze da zapamti podatke o prodavcu");
+            Logger.getLogger(BrokerCreateForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
