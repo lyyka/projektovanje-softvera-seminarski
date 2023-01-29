@@ -5,9 +5,7 @@
  */
 package app.thread;
 
-import app.controllers.BrokerController;
-import app.controllers.ClientController;
-import app.controllers.DealController;
+import app.controllers.Controller;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,9 +15,7 @@ import communication.Response;
 import communication.Sender;
 import domain.Client;
 import domain.Broker;
-import app.controllers.ProductController;
 import domain.Deal;
-import domain.Product;
 import main.SrvFrm;
 
 public class ProcessClientsRequests extends Thread {
@@ -53,62 +49,64 @@ public class ProcessClientsRequests extends Thread {
                     switch (request.getOperation()) {
                         case LOGIN:
                             Broker params = (Broker) request.getArgument();
-                            Broker b = (new BrokerController()).login(params);
+                            Broker b = Controller.getInstance().login(params);
                             response.setResult(b);
                             this.loggedInBroker = b;
                             this.srvFrm.refreshList();
                             break;
                         case GET_ALL_PRODUCTS:
-                            response.setResult((new ProductController()).all());
-                            break;
-                        case DELETE_PRODUCT:
-                            Product ptod = (Product) request.getArgument();
-                            (new ProductController()).delete(ptod);
-                            response.setResult(ptod);
+                            response.setResult(Controller.getInstance().loadAllProducts());
                             break;
                         case GET_ALL_CLIENTS:
-                            response.setResult((new ClientController()).all());
+                            response.setResult(Controller.getInstance().loadAllClients());
                             break;
                         case SEARCH_CLIENTS:
                             Client searchParamClient = (Client) request.getArgument();
-                            response.setResult((new ClientController()).search(searchParamClient));
+                            response.setResult(Controller.getInstance().searchClients(searchParamClient));
                             break;
                         case SAVE_CLIENT:
                             Client clientToSave = (Client) request.getArgument();
-                            (new ClientController()).save(clientToSave);
+                            if(clientToSave.getId() != null) {
+                                Controller.getInstance().updateClient(clientToSave);
+                            } else {
+                                Controller.getInstance().createClient(clientToSave);
+                            }
                             response.setResult(clientToSave);
                             break;
                         case DELETE_CLIENT:
                             Client clientToDelete = (Client) request.getArgument();
-                            (new ClientController()).delete(clientToDelete);
+                            Controller.getInstance().deleteClient(clientToDelete);
                             response.setResult(clientToDelete);
                             break;
                         case GET_ALL_BROKERS:
-                            response.setResult((new BrokerController()).all());
+                            response.setResult(Controller.getInstance().loadAllBrokers());
                             break;
                         case SEARCH_BROKERS:
-                            System.out.println("Search1");
                             Broker searchParamBroker = (Broker) request.getArgument();
-                            response.setResult((new BrokerController()).search(searchParamBroker));
+                            response.setResult(Controller.getInstance().searchBrokers(searchParamBroker));
                             break;
                         case SAVE_BROKER:
                             Broker brokerToSave = (Broker) request.getArgument();
-                            (new BrokerController()).save(brokerToSave);
+                            if(brokerToSave.getId() != null) {
+                                Controller.getInstance().updateBroker(brokerToSave);
+                            } else {
+                                Controller.getInstance().createBroker(brokerToSave);
+                            }
                             response.setResult(brokerToSave);
                             break;
                         case DELETE_BROKER:
                             Broker brokerToDelete = (Broker) request.getArgument();
-                            (new BrokerController()).delete(brokerToDelete);
+                            Controller.getInstance().deleteBroker(brokerToDelete);
                             response.setResult(brokerToDelete);
                             break;
-                        case SAVE_DEAL:
-                            Deal dealToSave = (Deal) request.getArgument();
-                            (new DealController()).save(dealToSave);
-                            response.setResult(dealToSave);
-                            break;
-                        case GET_ALL_DEALS:
-                            response.setResult((new DealController()).all());
-                            break;
+//                        case SAVE_DEAL:
+//                            Deal dealToSave = (Deal) request.getArgument();
+//                            (new DealController()).save(dealToSave);
+//                            response.setResult(dealToSave);
+//                            break;
+//                        case GET_ALL_DEALS:
+//                            response.setResult((new DealController()).all());
+//                            break;
                     }
                 } catch (Exception e) {
                     response.setException(e);

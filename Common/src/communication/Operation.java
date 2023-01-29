@@ -8,8 +8,6 @@ public enum Operation  implements Serializable{
     
     // Products
     GET_ALL_PRODUCTS,
-    SAVE_PRODUCT,
-    DELETE_PRODUCT,
     
     // Clients
     GET_ALL_CLIENTS,

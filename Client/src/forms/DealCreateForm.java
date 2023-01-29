@@ -139,7 +139,6 @@ public class DealCreateForm extends javax.swing.JDialog {
         jScrollPane2 = new javax.swing.JScrollPane();
         productsTable = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
-        deleteProductBtn = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         addPfs = new javax.swing.JButton();
@@ -177,13 +176,6 @@ public class DealCreateForm extends javax.swing.JDialog {
         jScrollPane2.setViewportView(productsTable);
 
         jLabel6.setText("Izaberi proizvod:");
-
-        deleteProductBtn.setText("Obrisi");
-        deleteProductBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteProductBtnActionPerformed(evt);
-            }
-        });
 
         jLabel8.setText("Naziv proizvoda:");
 
@@ -254,9 +246,7 @@ public class DealCreateForm extends javax.swing.JDialog {
                                     .addComponent(jLabel3)
                                     .addComponent(jScrollPane1)))
                             .addComponent(jScrollPane2))
-                        .addGap(18, 18, 18)
-                        .addComponent(deleteProductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20))
+                        .addGap(167, 167, 167))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -302,9 +292,7 @@ public class DealCreateForm extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(deleteProductBtn)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -345,25 +333,6 @@ public class DealCreateForm extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void deleteProductBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteProductBtnActionPerformed
-        int i = this.productsTable.getSelectedRow();
-        ProductTableModel ptm = (ProductTableModel) this.productsTable.getModel();
-        
-        if(i >= 0) {
-            Product product = ptm.getProductAt(i);
-            try {
-                Communication.getInstance().deleteProduct(product);
-                ptm.removeProductAt(i);
-                this.productsTable.setModel(ptm);
-                JOptionPane.showMessageDialog(this, "Product deleted");
-            } catch (Exception ex) {
-                Logger.getLogger(ClientViewForm.class.getName()).log(Level.SEVERE, null, ex);
-                
-                JOptionPane.showMessageDialog(this, "Product not deleted");
-            }
-        }
-    }//GEN-LAST:event_deleteProductBtnActionPerformed
 
     private void saveDealbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveDealbtnActionPerformed
         Client client = (Client) this.clientCB.getSelectedItem();
@@ -428,7 +397,6 @@ public class DealCreateForm extends javax.swing.JDialog {
     private javax.swing.JComboBox clientCB;
     private javax.swing.JComboBox<String> dealStatusCB;
     private javax.swing.JTextField dealValue;
-    private javax.swing.JButton deleteProductBtn;
     private javax.swing.JTextArea descTxt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

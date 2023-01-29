@@ -177,7 +177,6 @@ public class BrokerViewForm extends javax.swing.JDialog {
         if(i >= 0) {
             Broker broker = this.btm.getBrokerAt(i);
             try {
-                JOptionPane.showMessageDialog(this, "Sistem ne moze da izbrise prodavca");
                 Communication.getInstance().deleteBroker(broker);
                 this.btm.removeClientAt(i);
                 this.jTable1.setModel(this.btm);

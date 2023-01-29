@@ -1,10 +1,14 @@
 package domain;
 
-import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Product implements Serializable {
+public class Product implements GenericEntity {
     private Long id;
     private String title;
     private List<ProductFeature> productFeatures;
@@ -75,5 +79,58 @@ public class Product implements Serializable {
             return false;
         }
         return Objects.equals(this.productFeatures, other.productFeatures);
+    }
+
+
+    @Override
+    public String getTableName() {
+        return "products";
+    }
+    
+    @Override
+    public String getColumnNamesForInsert() {
+        return "title";
+    }
+
+    @Override
+    public String getInsertValues() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("'").append(title).append("',");
+        return sb.toString();
+    }
+
+    @Override
+    public String getUpdateValues() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("title = ").append("'").append(title).append("'").append(",");
+        return sb.toString();
+    }
+    
+    @Override
+    public String getColumnNamesForSelect() {
+        return "id,title";
+    }
+
+    @Override
+    public GenericEntity newFromResultSet(ResultSet rs) {
+        Product product = new Product();
+        try {
+            product.setId(rs.getLong("id"));
+            product.setTitle(rs.getString("title"));
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return product;
+    }
+
+    @Override
+    public String getWhereClauseForSelect() {
+        List<String> wheres = new ArrayList<>();
+        
+        if(title != null) {
+            wheres.add("title like '%" + title + "'%");
+        }
+        
+        return String.join(" or ", wheres);
     }
 }

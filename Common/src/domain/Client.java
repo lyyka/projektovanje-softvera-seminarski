@@ -1,10 +1,15 @@
 package domain;
 
-import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Client implements Serializable {
+public class Client implements GenericEntity {
     private Long id;
     private String firstName;
     private String lastName;
@@ -146,6 +151,84 @@ public class Client implements Serializable {
         }
         return Objects.equals(this.updatedAt, other.updatedAt);
     }
+
+
+    @Override
+    public String getTableName() {
+        return "clients";
+    }
     
+    @Override
+    public String getColumnNamesForInsert() {
+        return "first_name,last_name,email,phone";
+    }
+
+    @Override
+    public String getInsertValues() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("'").append(firstName).append("',")
+            .append("'").append(lastName).append("',")
+            .append("'").append(email).append("',")
+            .append("'").append(phone).append("',");
+        return sb.toString();
+    }
+
+    @Override
+    public String getUpdateValues() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("first_name = ").append("'").append(firstName).append("'").append(",")
+            .append("last_name = ").append("'").append(lastName).append("'").append(",")
+            .append("email = ").append("'").append(email).append("'").append(",")
+            .append("phone = ").append("'").append(phone).append("'").append(",");
+        return sb.toString();
+    }
     
+    @Override
+    public String getColumnNamesForSelect() {
+        return "id,first_name,last_name,email,phone,created_at,updated_at";
+    }
+
+    @Override
+    public GenericEntity newFromResultSet(ResultSet rs) {
+        Client client = new Client();
+        try {
+            client.setId(rs.getLong("id"));
+            client.setFirstName(rs.getString("first_name"));
+            client.setLastName(rs.getString("last_name"));
+            client.setEmail(rs.getString("email"));
+            client.setPhone(rs.getString("phone"));
+            client.setCreatedAt(rs.getDate("created_at"));
+            client.setUpdatedAt(rs.getDate("updated_at"));
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return client;
+    }
+
+    @Override
+    public String getWhereClauseForSelect() {
+        List<String> wheres = new ArrayList<>();
+        
+        if(firstName != null) {
+            wheres.add("first_name like '%" + firstName + "'%");
+        }
+        
+        if(lastName != null) {
+            wheres.add("last_name like '%" + lastName + "'%");
+        }
+        
+        if(email != null) {
+            wheres.add("email like '%" + email + "'%");
+        }
+        
+        if(phone != null) {
+            wheres.add("phone like '%" + phone + "'%");
+        }
+        
+        if(address != null) {
+            wheres.add("address like '%" + address + "'%");
+        }
+        
+        return String.join(" or ", wheres);
+    }
 }

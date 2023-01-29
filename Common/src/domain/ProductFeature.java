@@ -1,9 +1,14 @@
 package domain;
 
-import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class ProductFeature implements Serializable {
+public class ProductFeature implements GenericEntity {
     private Long id;
     private Product product;
     private String title;
@@ -87,5 +92,71 @@ public class ProductFeature implements Serializable {
             return false;
         }
         return Objects.equals(this.product, other.product);
+    }
+
+
+    @Override
+    public String getTableName() {
+        return "product_features";
+    }
+    
+    @Override
+    public String getColumnNamesForInsert() {
+        return "title,val";
+    }
+
+    @Override
+    public String getInsertValues() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("'").append(title).append("',");
+        sb.append("'").append(val).append("',");
+        return sb.toString();
+    }
+
+    @Override
+    public String getUpdateValues() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("title = ").append("'").append(title).append("'").append(",")
+                .append("val = ").append("'").append(val).append("'").append(",");
+        return sb.toString();
+    }
+    
+    @Override
+    public String getColumnNamesForSelect() {
+        return "id,title,val";
+    }
+
+    @Override
+    public GenericEntity newFromResultSet(ResultSet rs) {
+        ProductFeature pf = new ProductFeature();
+        try {
+            pf.setId(rs.getLong("id"));
+            pf.setTitle(rs.getString("title"));
+            pf.setVal(rs.getString("val"));
+        } catch (SQLException ex) {
+            Logger.getLogger(Broker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return pf;
+    }
+
+    @Override
+    public String getWhereClauseForSelect() {
+        List<String> wheres = new ArrayList<>();
+        
+        if(title != null) {
+            wheres.add("title like '%" + title + "'%");
+        }
+        
+        String res = String.join(" or ", wheres);
+        
+        if(product != null) {
+            if(res.length() > 0) {
+                return "(" + res + ") and product_id = " + product.getId();
+            } else {
+                return "product_id = " + product.getId();
+            }
+        }
+        
+        return res;
     }
 }
