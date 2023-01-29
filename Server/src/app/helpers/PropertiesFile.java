@@ -1,39 +1,51 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package app.helpers;
 
+import app.thread.ProcessClientsRequests;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-/**
- *
- * @author kredium
- */
 public class PropertiesFile {
+    private static PropertiesFile instance;
     private static Properties properties;
     
-    public PropertiesFile() throws FileNotFoundException, IOException {
+    private PropertiesFile() {
         PropertiesFile.init();
     }
     
-    private static void init()
+    public static PropertiesFile getInstance()
     {
-        if(PropertiesFile.properties == null) {
-            PropertiesFile.properties = new Properties();
+        if(instance == null) {
+            instance = new PropertiesFile();
+        }
+        
+        return instance;
+    }
+    
+    private static Properties init()
+    {
+        if(properties == null) {
+            properties = new Properties();
             try {
-                PropertiesFile.properties.load(new FileInputStream("config/env.properties"));
-            } catch(IOException e) {
-                System.out.println("Cannot load env file!");
+                properties.load(new FileInputStream("config/env.properties"));
+            } catch(IOException ex) {
+                Logger.getLogger(ProcessClientsRequests.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
+        return properties;
     }
     
-    public static String get(String key) {
-        PropertiesFile.init();
-        return PropertiesFile.properties.getProperty(key);
+    public String get(String key) {
+        return properties.getProperty(key);
+    }
+    
+    public void set(String key, String value) throws FileNotFoundException, IOException {
+        properties.setProperty(key, value);
+        properties.store(new FileOutputStream("config/env.properties"), "ENV configuration");
     }
 }

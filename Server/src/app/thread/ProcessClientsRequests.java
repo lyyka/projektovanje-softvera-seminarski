@@ -17,9 +17,7 @@ import communication.Sender;
 import domain.Client;
 import domain.Broker;
 import domain.Deal;
-import java.io.EOFException;
 import java.io.IOException;
-import java.net.SocketException;
 
 public class ProcessClientsRequests extends Thread {
     Broker loggedInBroker;
@@ -32,6 +30,15 @@ public class ProcessClientsRequests extends Thread {
         this.socket = socket;        
         sender = new Sender(socket);
         receiver = new Receiver(socket);
+    }
+    
+    public void stopHandler() throws IOException
+    {
+        if(this.socket != null) {
+            if(!this.socket.isClosed()) {
+                this.socket.close();
+            }
+        }
     }
     
     public void setServer(Server server) {
@@ -129,6 +136,7 @@ public class ProcessClientsRequests extends Thread {
                     }
                 } catch (Exception e) {
                     response.setException(e);
+                    Logger.getLogger(ProcessClientsRequests.class.getName()).log(Level.SEVERE, null, e);
                 }
                 sender.send(response);
             } catch (Exception ex) {
@@ -137,7 +145,9 @@ public class ProcessClientsRequests extends Thread {
                 this.server.removePcr(this);
                 try {
                     this.socket.close();
+                    this.socket = null;
                 } catch (IOException exc) { }
+                Logger.getLogger(ProcessClientsRequests.class.getName()).log(Level.SEVERE, null, ex);
                 break;
             }
         }

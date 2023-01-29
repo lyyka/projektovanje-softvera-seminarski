@@ -1,6 +1,13 @@
 package main;
 
 import app.server.Server;
+import java.awt.Color;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class SrvFrm extends javax.swing.JFrame {
 
@@ -13,11 +20,21 @@ public class SrvFrm extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        
+        this.initList();
+        
+        this.statusLbl.setText("Ugaseno");
+        this.statusLbl.setForeground(Color.red);
+    }
+    
+    private void initList()
+    {
+        this.loggedInUsersListTable.setModel(new BrokerTableModel(new ArrayList<>()));
     }
     
     public void refreshList()
     {
-        this.jTable1.setModel(
+        this.loggedInUsersListTable.setModel(
                 new BrokerTableModel(
                         this.server.getLoggedInBrokers()
                 )
@@ -33,23 +50,24 @@ public class SrvFrm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        startServerButton = new javax.swing.JButton();
         statusLbl = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        loggedInUsersListTable = new javax.swing.JTable();
+        dbConfigButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Pokreni");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        startServerButton.setText("Pokreni");
+        startServerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                startServerButtonActionPerformed(evt);
             }
         });
 
         statusLbl.setText("Nije pokrenuto");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        loggedInUsersListTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -60,7 +78,14 @@ public class SrvFrm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(loggedInUsersListTable);
+
+        dbConfigButton.setText("Konfiguracija baze ");
+        dbConfigButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dbConfigButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -71,10 +96,11 @@ public class SrvFrm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(startServerButton)
                         .addGap(18, 18, 18)
                         .addComponent(statusLbl)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(dbConfigButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -82,8 +108,9 @@ public class SrvFrm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(statusLbl))
+                    .addComponent(startServerButton)
+                    .addComponent(statusLbl)
+                    .addComponent(dbConfigButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
                 .addContainerGap())
@@ -92,19 +119,40 @@ public class SrvFrm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void startServerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startServerButtonActionPerformed
         if(this.server == null) {
             this.server = new Server(this);
             this.server.start();
             this.statusLbl.setText("Pokrenuto");
-            this.jButton1.setEnabled(false);
+            this.statusLbl.setForeground(Color.green);
+            this.startServerButton.setText("Ugasi");
+            this.dbConfigButton.setEnabled(false);
+        } else {
+            try {
+                this.server.stopServer();
+                this.server = null;
+                this.statusLbl.setText("Ugaseno");
+                this.statusLbl.setForeground(Color.red);
+                this.startServerButton.setText("Pokreni");
+                this.dbConfigButton.setEnabled(true);
+            } catch (SQLException | IOException ex) {
+                JOptionPane.showMessageDialog(this, "Greska prilikom gasenja servera", "", JOptionPane.ERROR_MESSAGE);
+                Logger.getLogger(SrvFrm.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_startServerButtonActionPerformed
+
+    private void dbConfigButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dbConfigButtonActionPerformed
+        if(this.server == null) {
+            (new DBConfigForm(this, false)).setVisible(true);
+        }
+    }//GEN-LAST:event_dbConfigButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton dbConfigButton;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable loggedInUsersListTable;
+    private javax.swing.JButton startServerButton;
     private javax.swing.JLabel statusLbl;
     // End of variables declaration//GEN-END:variables
 }
